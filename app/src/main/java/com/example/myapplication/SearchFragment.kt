@@ -61,10 +61,10 @@ class SearchFragment : Fragment() {
 
 
     private fun searchForUsers(str : String){
-        val firebaseUserId = FirebaseAuth.getInstance().currentUser
-        val queryUser =firebaseUserId?.uid?.let {
-            FirebaseDatabase.getInstance().reference.child("User").child(it)
-                .orderByChild("search").startAt(str).endAt(str + "\uf8ff")
+        val firebaseUserId = FirebaseAuth.getInstance().currentUser?.uid
+        val queryUser = FirebaseDatabase.getInstance().reference.child("User").orderByChild("search")
+            .startAt(string)
+            .endAt(string + "\uf8ff")
         }
         queryUser?.addListenerForSingleValueEvent(object: ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
