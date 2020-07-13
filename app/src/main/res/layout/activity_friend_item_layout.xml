@@ -7,7 +7,7 @@
     android:layout_height="wrap_content">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/activity_user_item_layout_ProfileImage"
+        android:id="@+id/activity_friend_item_layout_ProfileImage"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_alignParentEnd="true"
@@ -17,10 +17,11 @@
         android:src="@drawable/blank_profile_picture"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
-        android:id="@+id/activity_user_item_layout_username"
+        android:id="@+id/activity_friend_item_layout_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -34,45 +35,36 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/activity_user_item_layout_online"
+        android:id="@+id/activity_friend_item_layout_online"
         android:layout_width="14dp"
         android:layout_height="14dp"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:src="@drawable/blank_profile_picture"
+        android:layout_marginTop="48dp"
         app:civ_border_color="#05df29"
         app:civ_border_width="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.977"
-        />
+        android:src="@drawable/blank_profile_picture"
+        app:layout_constraintEnd_toEndOf="@+id/activity_user_item_layout_ProfileImage"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/activity_user_item_layout_offline"
+        android:id="@+id/activity_friend_item_layout_offline"
         android:layout_width="14dp"
         android:layout_height="14dp"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:src="@drawable/blank_profile_picture"
+        android:layout_marginTop="48dp"
         app:civ_border_color="@android:color/tab_indicator_text"
         app:civ_border_width="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/blank_profile_picture"
+        app:layout_constraintEnd_toEndOf="@+id/activity_user_item_layout_ProfileImage"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.977"
         android:visibility="gone"/>
 
     <TextView
-        android:id="@+id/activity_user_item_layout_lastMessage"
+        android:id="@+id/activity_friend_item_layout_lastMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="28dp"
         android:layout_marginTop="4dp"
         android:maxLines="1"
         android:text="User Name"
@@ -81,27 +73,4 @@
         app:layout_constraintStart_toEndOf="@+id/activity_user_item_layout_ProfileImage"
         app:layout_constraintTop_toBottomOf="@+id/activity_user_item_layout_username" />
 
-    <Button
-        android:id="@+id/activity_user_item_layout_add_friend"
-        android:background="@color/colorPrimaryDark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="240dp"
-        android:layout_marginTop="8dp"
-        android:text="Add Friend"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/activity_user_item_layout_ProfileImage"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-    <Button
-        android:id="@+id/activity_user_item_layout_cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="240dp"
-        android:layout_marginTop="8dp"
-        android:text="Cancel"
-        app:layout_constraintStart_toEndOf="@+id/activity_user_item_layout_ProfileImage"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

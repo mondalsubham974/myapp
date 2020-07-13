@@ -56,8 +56,8 @@ class RegisterActivity : AppCompatActivity() {
                         userHashMap["status"] = "offline"
                         userHashMap["profile"] = "https://firebasestorage.googleapis.com/v0/b/kotha1.appspot.com/o/blank_profile_picture.png?alt=media&token=83baffd3-722b-48ae-9c71-1d21207182b2"
                         userHashMap["cover"] = "https://firebasestorage.googleapis.com/v0/b/kotha1.appspot.com/o/cover_profile_image.png?alt=media&token=4098ee58-d5e0-4c86-965e-705983178eac"
-                        userHashMap["facebook"] = "https://m.facebook.com"
-                        userHashMap["instagram"] = "https://m.instagram.com"
+                        userHashMap["friends"] = "friend"
+                        userHashMap["unfriend"] = "unfriend"
                         userHashMap["website"] = "https://www.google.com"
 
                         refUser.updateChildren(userHashMap).addOnCompleteListener {task ->

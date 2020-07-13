@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 
-class UserAdapter(private val mcontext:Context,private val mUsers:List<Users>,
+class UserAdapter(private val mcontext: Context, private val mUsers:List<Users>,
                   private val isChatCheck:Boolean):RecyclerView.Adapter<UserAdapter.ViewHolder?>()
 {
 
@@ -17,7 +17,7 @@ class UserAdapter(private val mcontext:Context,private val mUsers:List<Users>,
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val view: View = LayoutInflater.from(mcontext).inflate(R.layout.user_search_item_layout,viewGroup,false)
         return ViewHolder(view)
-}
+    }
 
     override fun getItemCount(): Int {
         return mUsers.size

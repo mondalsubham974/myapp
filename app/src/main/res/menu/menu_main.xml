@@ -7,4 +7,9 @@
         android:orderInCategory="100"
         android:title="Sign Out"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_friends"
+        android:orderInCategory="100"
+        android:title="Friends"
+        app:showAsAction="never"/>
 </menu>

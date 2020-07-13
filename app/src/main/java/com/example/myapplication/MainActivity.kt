@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         viewPagerAdapter.addFragment(SearchFragment(),"Search")
         viewPagerAdapter.addFragment(SettingsFragment(),"Settings")
 
+
         viewPager.adapter = viewPagerAdapter
         tabLayout.setupWithViewPager(viewPager)
 
