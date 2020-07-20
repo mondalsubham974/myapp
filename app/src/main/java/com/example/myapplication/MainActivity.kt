@@ -34,6 +34,8 @@ class MainActivity : AppCompatActivity() {
 
         viewPagerAdapter.addFragment(ChatsFragment(),"Chats")
         viewPagerAdapter.addFragment(SearchFragment(),"Search")
+        viewPagerAdapter.addFragment(FriendRequestFragment(),"Request")
+        viewPagerAdapter.addFragment(FriendFragment(),"Friend")
         viewPagerAdapter.addFragment(SettingsFragment(),"Settings")
 
 

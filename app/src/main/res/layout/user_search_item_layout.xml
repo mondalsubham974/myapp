@@ -48,7 +48,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.977"
-        />
+        android:visibility="gone"/>
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/activity_user_item_layout_offline"
@@ -59,13 +59,13 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:src="@drawable/blank_profile_picture"
-        app:civ_border_color="@android:color/tab_indicator_text"
+        app:civ_border_color="@android:color/darker_gray"
         app:civ_border_width="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.977"
-        android:visibility="gone"/>
+        />
 
     <TextView
         android:id="@+id/activity_user_item_layout_lastMessage"
@@ -82,26 +82,14 @@
         app:layout_constraintTop_toBottomOf="@+id/activity_user_item_layout_username" />
 
     <Button
-        android:id="@+id/activity_user_item_layout_add_friend"
-        android:background="@color/colorPrimaryDark"
+        android:id="@+id/add_friend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="240dp"
         android:layout_marginTop="8dp"
         android:text="Add Friend"
-        android:textColor="@android:color/white"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/activity_user_item_layout_ProfileImage"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-    <Button
-        android:id="@+id/activity_user_item_layout_cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="240dp"
-        android:layout_marginTop="8dp"
-        android:text="Cancel"
-        app:layout_constraintStart_toEndOf="@+id/activity_user_item_layout_ProfileImage"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -58,7 +58,7 @@ class RegisterActivity : AppCompatActivity() {
                         userHashMap["cover"] = "https://firebasestorage.googleapis.com/v0/b/kotha1.appspot.com/o/cover_profile_image.png?alt=media&token=4098ee58-d5e0-4c86-965e-705983178eac"
                         userHashMap["friends"] = "friend"
                         userHashMap["unfriend"] = "unfriend"
-                        userHashMap["website"] = "https://www.google.com"
+                        userHashMap["request_type"] = "sent"
 
                         refUser.updateChildren(userHashMap).addOnCompleteListener {task ->
                             if (task.isSuccessful){
