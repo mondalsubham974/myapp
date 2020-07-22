@@ -33,7 +33,7 @@ class SettingsFragment : Fragment() {
     private val RequestCode = 438
     private var imageUri: Uri? = null
     private var storageRef: StorageReference? = null
-    private var coverChecker: String? = null
+    private var coverChecker: String? = ""
 
 
     override fun onCreateView(
@@ -43,9 +43,8 @@ class SettingsFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
         storageRef = FirebaseStorage.getInstance().reference.child("User Images")
-        val firebaseUser = FirebaseAuth.getInstance().currentUser
-        val refUser =
-            FirebaseDatabase.getInstance().reference.child("User").child(firebaseUser!!.uid)
+        firebaseUser = FirebaseAuth.getInstance().currentUser
+        val refUser = FirebaseDatabase.getInstance().reference.child("User").child(firebaseUser!!.uid)
 
 
         refUser.addListenerForSingleValueEvent(object :ValueEventListener{
@@ -86,7 +85,7 @@ class SettingsFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == RequestCode && resultCode == Activity.RESULT_OK && data?.data != null){
+        if (requestCode == RequestCode && resultCode == Activity.RESULT_OK && data!!.data != null){
             imageUri = data.data
             Toast.makeText(context, "Uploading...",Toast.LENGTH_LONG).show()
             UploadImageToDatabase()
@@ -105,26 +104,28 @@ class SettingsFragment : Fragment() {
             uploadTask = fileRef.putFile(imageUri!!)
             uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
                 if (!task.isSuccessful){
-                    task.exception.let {
-                        throw it!!
+                    task.exception?.let {
+                        throw it
+
+                        
                     }
 
                 }
                 return@Continuation fileRef.downloadUrl
             }).addOnCompleteListener { task ->
                 if (task.isSuccessful){
-                    val downloadUri = task.result
-                    val mUri = downloadUri.toString()
+                    val downloadUrl = task.result
+                    val mUrl = downloadUrl.toString()
 
                     if (coverChecker == "cover"){
                         val mapCoverImg = HashMap<String, Any>()
-                        mapCoverImg["cover"]
+                        mapCoverImg["cover"] = mUrl
                         usersRefference?.updateChildren(mapCoverImg)
                         coverChecker = ""
                     }
                     else{
                         val mapProfileImg = HashMap<String, Any>()
-                        mapProfileImg["Profile"]
+                        mapProfileImg["Profile"] = mUrl
                         usersRefference?.updateChildren(mapProfileImg)
                         coverChecker = ""
                     }
