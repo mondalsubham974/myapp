@@ -27,7 +27,7 @@ class FriendRequestFragment : Fragment() {
     private var mUsers: List<Users>? = null
     private var recyclerView: RecyclerView? = null
     private var requestButton: Button? =null
-    private var cancleButton: Button? =null
+    private var cancelButton: Button? =null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,9 +37,9 @@ class FriendRequestFragment : Fragment() {
          val view = inflater.inflate(R.layout.fragment_friend_request, container, false)
         recyclerView = view.findViewById(R.id.request_list)
         recyclerView?.setHasFixedSize(true)
-        recyclerView?.layoutManager = LinearLayoutManager(activity)
+        recyclerView?.layoutManager = LinearLayoutManager(context)
         requestButton = view.findViewById(R.id.activity_request_item_layout_confirm_friend)
-        cancleButton = view.findViewById(R.id.activity_request_item_layout_cancel_button)
+        cancelButton = view.findViewById(R.id.activity_request_item_layout_cancel_button)
         mUsers = ArrayList()
 
 
@@ -59,7 +59,7 @@ class FriendRequestFragment : Fragment() {
 
     private fun friendRequest() {
         val firebaseUserId = FirebaseAuth.getInstance().currentUser
-        val refUsers = FirebaseDatabase.getInstance().reference.child("received")
+        val refUsers = FirebaseDatabase.getInstance().reference.child("Received")
         refUsers.addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
 
@@ -67,13 +67,12 @@ class FriendRequestFragment : Fragment() {
 
             override fun onDataChange(p0: DataSnapshot) {
                 (mUsers as ArrayList<Users>).clear()
-
-                    for (snapshot in p0.children){
-                        val user: Users = snapshot.getValue(Users::class.java)!!
-                        if (!(firebaseUserId)!!.equals(user.uid)){
-                            (mUsers as ArrayList<Users>).add(user)
-                        }
+                for (snapshot in p0.children){
+                    val user: Users = snapshot.getValue(Users::class.java)!!
+                    if (!(firebaseUserId)!!.equals(user.uid)){
+                        (mUsers as ArrayList<Users>).add(user)
                     }
+                }
 
 
                 friendAdapter = FriendAdapter(context!!,mUsers!!,false)
@@ -115,7 +114,7 @@ class FriendAdapter(private val mcontext: Context, private val mUsers:List<Users
         var offlineImageView: CircleImageView = itemView.findViewById(R.id.activity_user_item_layout_offline)
         var lastMessageTxt: TextView = itemView.findViewById(R.id.activity_user_item_layout_lastMessage)
         var confirmFriendButton: Button = itemView.findViewById(R.id.activity_request_item_layout_confirm_friend)
-        var cancleFriendButton: Button = itemView.findViewById(R.id.activity_request_item_layout_cancel_button)
+        var cancelFriendButton: Button = itemView.findViewById(R.id.activity_request_item_layout_cancel_button)
 
     }
 

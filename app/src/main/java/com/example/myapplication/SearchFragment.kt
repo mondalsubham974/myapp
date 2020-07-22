@@ -32,10 +32,8 @@ class SearchFragment : Fragment() {
     private var mUsers: List<Users>? = null
     private var recyclerView: RecyclerView? = null
     private var searchEditText: EditText? =null
-    private var mCurrent_state:String = "not_friend"
     private var mProfileSendReqButton: Button? =null
-    private var mProfilecanButton: Button? =null
-    var firebaseUserId = FirebaseAuth.getInstance().currentUser
+
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -45,7 +43,7 @@ class SearchFragment : Fragment() {
         recyclerView?.setHasFixedSize(true)
         recyclerView?.layoutManager = LinearLayoutManager(context)
         searchEditText = view.findViewById(R.id.search_bar)
-        mProfileSendReqButton = view.findViewById(R.id.add_friend)
+
 
         mUsers = ArrayList()
         retrieveAllUsers()
