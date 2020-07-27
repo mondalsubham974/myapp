@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.firebase.ui.auth.viewmodel.RequestCodes
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
@@ -21,8 +20,6 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.android.synthetic.main.fragment_settings.view.*
 
 
@@ -48,7 +45,7 @@ class SettingsFragment : Fragment() {
 
 
         refUser.addListenerForSingleValueEvent(object :ValueEventListener{
-            override fun onCancelled(error: DatabaseError) {
+            override fun onCancelled(p0: DatabaseError) {
 
             }
 
@@ -57,8 +54,8 @@ class SettingsFragment : Fragment() {
                     val user:Users? = p0.getValue(Users::class.java)
                     if (context != null){
                         view.settings_username.text = user!!.username
-                        Picasso.get().load(user.profile).placeholder(R.drawable.blank_profile_picture).into(view.settings_profile)
-                        Picasso.get().load(user.cover).placeholder(R.drawable.blank_profile_picture).into(view.settings_cover)
+                        Picasso.get().load(user.profile).into(view.settings_profile)
+                        Picasso.get().load(user.cover).into(view.settings_cover)
                     }
 
                 }
