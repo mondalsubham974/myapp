@@ -18,11 +18,6 @@ import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 
 
-/**
- * Created by KSHITIZ on 3/29/2018.
- *
- * ------FOR REQUEST FRAGMENT------
- */
 class RequestAdapter(private var ctx: Context, private val requestList:List<Users>,
                      private val isChatCheck:Boolean): RecyclerView.Adapter<RequestViewHolder>() {
     private var firebaseUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser

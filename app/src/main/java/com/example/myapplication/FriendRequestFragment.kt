@@ -13,10 +13,6 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-/**
- * A simple [Fragment] subclass.
- * --- A SIMPLE FRAGMENT FOR MANGING SENT AND RECEIVED FRIEND REQUEST----
- */
 class FriendRequestFragment : Fragment() {
     private var recyclerView: RecyclerView? = null
     private var requestList: List<Users>? = null
@@ -27,53 +23,53 @@ class FriendRequestFragment : Fragment() {
     private var firebaseUser: String? = null
     private var mRequestAdapter: RequestAdapter? = null
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
+        // Inflate the layout for this fragment
+        val view: View =inflater.inflate(R.layout.fragment_friend_request, container, false)
+        recyclerView = view.findViewById(R.id.friend_request_list)
+        recyclerView?.setHasFixedSize(true)
+        recyclerView?.layoutManager = LinearLayoutManager(context)
+        mAuth = FirebaseAuth.getInstance()
+        firebaseUser = mAuth!!.currentUser!!.uid
+        mDatabaseReference = FirebaseDatabase.getInstance().reference.child("Add Friend")
+
+        requestList = ArrayList()
+        friendRequest()
+        return view
+    }
 
 
-        override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
-            // Inflate the layout for this fragment
-            val view: View =inflater.inflate(R.layout.fragment_friend_request, container, false)
-            recyclerView = view.findViewById(R.id.friend_request_list)
-            recyclerView?.setHasFixedSize(true)
-            recyclerView?.layoutManager = LinearLayoutManager(context)
-            mAuth = FirebaseAuth.getInstance()
-            firebaseUser = mAuth!!.currentUser!!.uid
-            mDatabaseReference = FirebaseDatabase.getInstance().reference.child("Friend Request")
-
-            requestList = ArrayList()
-            friendRequest()
-            return view
-        }
 
     private fun friendRequest() {
-        mDatabaseReference!!.orderByChild("Receive").addChildEventListener(object : ChildEventListener{
+        mDatabaseReference!!.child(firebaseUser!!).addChildEventListener(object : ChildEventListener{
             override fun onCancelled(error: DatabaseError) {
 
             }
 
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+            override fun onChildMoved(p0: DataSnapshot, previousChildName: String?) {
 
             }
 
             override fun onChildChanged(p0: DataSnapshot, previousChildName: String?) {
+
+            }
+            override fun onChildAdded(p0: DataSnapshot, previousChildName: String?) {
                 (requestList as ArrayList<Users>).clear()
 
                 for (snapshot in p0.children){
                     val user: Users = snapshot.getValue(Users::class.java)!!
-                    if (!(firebaseUser)!!.equals(user.uid)){
+                    if ((firebaseUser)!! != user.uid){
                         (requestList as ArrayList<Users>).add(user)
                     }
                 }
                 mRequestAdapter!!.notifyDataSetChanged()
-                mRequestAdapter = RequestAdapter(requireContext(),requestList!!,false)
+                mRequestAdapter = RequestAdapter(context!!,requestList!!,false)
                 recyclerView!!.adapter = mRequestAdapter
-            }
-
-            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
 
             }
 
-            override fun onChildRemoved(snapshot: DataSnapshot) {
+            override fun onChildRemoved(p0: DataSnapshot) {
 
             }
 

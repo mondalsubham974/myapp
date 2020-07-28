@@ -42,7 +42,7 @@ class UserAdapter(private val mcontext: Context, private val mUsers:List<Users>,
                 if (holder.addFriendButton.text.toString()== "Add Friend"){
                     firebaseUser?.uid.let {it ->
                         FirebaseDatabase.getInstance().reference
-                            .child("Add Friend").child(it.toString())
+                            .child("Add Friend").child("Sent").child(it.toString())
                             .child("Receive").child(user.uid)
                             .setValue(true)
 
@@ -52,7 +52,7 @@ class UserAdapter(private val mcontext: Context, private val mUsers:List<Users>,
 
                         firebaseUser?.uid.let {it ->
                             FirebaseDatabase.getInstance().reference
-                                .child("Add Friend").child(it.toString())
+                                .child("Add Friend").child("Sent").child(it.toString())
                                 .child("Receive").child(user.uid)
                                 .removeValue()
 
@@ -77,7 +77,7 @@ class UserAdapter(private val mcontext: Context, private val mUsers:List<Users>,
     private fun checkAddFriendStatus(uid: String,addFriend:Button){
         val addFriendRef = firebaseUser?.uid.let { it->
             FirebaseDatabase.getInstance().reference
-                .child("Add Friend").child(it.toString())
+                .child("Add Friend").child("Sent").child(it.toString())
                 .child("Receive")
         }
         addFriendRef.addValueEventListener(object :ValueEventListener{
