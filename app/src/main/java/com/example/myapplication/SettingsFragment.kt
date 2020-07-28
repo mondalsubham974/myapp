@@ -3,6 +3,7 @@ package com.example.myapplication
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -21,7 +22,7 @@ import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_settings.view.*
-
+import java.io.ByteArrayOutputStream
 
 class SettingsFragment : Fragment() {
 
@@ -37,7 +38,7 @@ class SettingsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+// Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
         storageRef = FirebaseStorage.getInstance().reference.child("User Images")
         firebaseUser = FirebaseAuth.getInstance().currentUser
@@ -85,11 +86,11 @@ class SettingsFragment : Fragment() {
         if (requestCode == RequestCode && resultCode == Activity.RESULT_OK && data!!.data != null){
             imageUri = data.data
             Toast.makeText(context, "Uploading...",Toast.LENGTH_LONG).show()
-            UploadImageToDatabase()
+            uploadImageToDatabase()
         }
     }
 
-    private fun UploadImageToDatabase() {
+    private fun uploadImageToDatabase() {
         val progressBar = ProgressDialog(context)
         progressBar.setMessage("image is uploading, please wait....")
         progressBar.show()
@@ -104,7 +105,7 @@ class SettingsFragment : Fragment() {
                     task.exception?.let {
                         throw it
 
-                        
+
                     }
 
                 }
