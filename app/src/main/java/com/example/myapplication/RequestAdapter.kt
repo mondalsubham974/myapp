@@ -38,13 +38,7 @@ class RequestAdapter(private var ctx: Context, private val requestList:List<User
         holder.displayName.text = user.username
         Picasso.get().load(user.profile).placeholder(R.drawable.blank_profile_picture).into(holder.displayImage)
 
-        /* holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ctx,ProfileActivity.class);
-                intent.putExtra("user_id",requestList.get(position));
-            }
-        }); */
+
     }
 
     override fun getItemCount(): Int {

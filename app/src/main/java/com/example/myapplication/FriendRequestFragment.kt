@@ -27,11 +27,11 @@ class FriendRequestFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view: View =inflater.inflate(R.layout.fragment_friend_request, container, false)
-        recyclerView = view.findViewById(R.id.friend_request_list)
+        recyclerView = view.findViewById(R.id.request_list)
         recyclerView?.setHasFixedSize(true)
         recyclerView?.layoutManager = LinearLayoutManager(context)
-        mAuth = FirebaseAuth.getInstance()
-        firebaseUser = mAuth!!.currentUser!!.uid
+
+        firebaseUser = FirebaseAuth.getInstance().currentUser!!.uid
         mDatabaseReference = FirebaseDatabase.getInstance().reference.child("Add Friend")
 
         requestList = ArrayList()
@@ -63,7 +63,7 @@ class FriendRequestFragment : Fragment() {
                         (requestList as ArrayList<Users>).add(user)
                     }
                 }
-                mRequestAdapter!!.notifyDataSetChanged()
+
                 mRequestAdapter = RequestAdapter(context!!,requestList!!,false)
                 recyclerView!!.adapter = mRequestAdapter
 

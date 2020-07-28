@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Bitmap
+
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -86,11 +87,11 @@ class SettingsFragment : Fragment() {
         if (requestCode == RequestCode && resultCode == Activity.RESULT_OK && data!!.data != null){
             imageUri = data.data
             Toast.makeText(context, "Uploading...",Toast.LENGTH_LONG).show()
-            uploadImageToDatabase()
+            UploadImageToDatabase()
         }
     }
 
-    private fun uploadImageToDatabase() {
+    private fun UploadImageToDatabase() {
         val progressBar = ProgressDialog(context)
         progressBar.setMessage("image is uploading, please wait....")
         progressBar.show()
