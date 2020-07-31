@@ -42,7 +42,7 @@ class FriendRequestFragment : Fragment() {
 
     private fun friendRequest() {
 
-        mDatabaseReference.addListenerForSingleValueEvent(object : ValueEventListener{
+        mDatabaseReference!!.addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
 
             }
