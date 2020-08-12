@@ -1,17 +1,22 @@
 package com.example.myapplication
 
+
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
-import android.graphics.Bitmap
-
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
@@ -23,16 +28,27 @@ import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_settings.view.*
-import java.io.ByteArrayOutputStream
+import java.util.*
+import kotlin.collections.HashMap
+
 
 class SettingsFragment : Fragment() {
 
-    var usersRefference: DatabaseReference? = null
+    var usersReference: DatabaseReference? = null
     var firebaseUser: FirebaseUser? = null
     private val RequestCode = 438
     private var imageUri: Uri? = null
     private var storageRef: StorageReference? = null
     private var coverChecker: String? = ""
+    private var mCurrent_state: String? = null
+    var mfriendReqReference: DatabaseReference? = null
+    var mDatabaseReference: DatabaseReference? = null
+    var mFriendDatabase: DatabaseReference? = null
+    var mNotificationReference: DatabaseReference? = null
+    var mRootReference: DatabaseReference? = null
+    var getmDatabaseReference: DatabaseReference? = null
+    var mFirebaseUser: FirebaseUser? = null
+    var user_id: String? = null
 
 
     override fun onCreateView(
@@ -41,8 +57,10 @@ class SettingsFragment : Fragment() {
     ): View? {
 // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
+
         storageRef = FirebaseStorage.getInstance().reference.child("User Images")
         firebaseUser = FirebaseAuth.getInstance().currentUser
+
         val refUser = FirebaseDatabase.getInstance().reference.child("User").child(firebaseUser!!.uid)
 
 
@@ -119,13 +137,13 @@ class SettingsFragment : Fragment() {
                     if (coverChecker == "cover"){
                         val mapCoverImg = HashMap<String, Any>()
                         mapCoverImg["cover"] = mUrl
-                        usersRefference?.updateChildren(mapCoverImg)
+                        usersReference?.updateChildren(mapCoverImg)
                         coverChecker = ""
                     }
                     else{
                         val mapProfileImg = HashMap<String, Any>()
-                        mapProfileImg["Profile"] = mUrl
-                        usersRefference?.updateChildren(mapProfileImg)
+                        mapProfileImg["profile"] = mUrl
+                        usersReference?.updateChildren(mapProfileImg)
                         coverChecker = ""
                     }
                     progressBar.dismiss()
@@ -135,3 +153,6 @@ class SettingsFragment : Fragment() {
     }
 
 }
+
+
+
