@@ -45,21 +45,8 @@ class UserAdapter(private val mcontext: Context, private val mUsers:List<Users>,
                 }
                 holder.addFriendButton.text = "Cancel"
             }
-            else if(holder.addFriendButton.text.toString()== "Friends"){
-                firebaseUser?.let {it ->
-                    if (){
-                        FirebaseDatabase.getInstance().reference
-                            .child("Confirm Friends").child(it)
-                            .child("Friends").child(user.uid)
-                    }
-                    else{
-                        FirebaseDatabase.getInstance().reference
-                            .child("Confirm Friends").child(user.uid)
-                            .child("Friends").child(it)
-                    }
-                }
-                holder.addFriendButton.text = "Friends"
-            }
+
+
             else {
                 firebaseUser?.let {it ->
                     FirebaseDatabase.getInstance().reference
