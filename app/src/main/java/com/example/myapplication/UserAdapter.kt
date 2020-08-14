@@ -3,65 +3,86 @@ package com.example.myapplication
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.INVISIBLE
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 
 class UserAdapter(private val mcontext: Context, private val mUsers:List<Users>,
                   private val isChatCheck:Boolean):RecyclerView.Adapter<UserAdapter.ViewHolder?>()
 {
-    private var firebaseUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
-
-
-    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): UserAdapter.ViewHolder {
+    private var firebaseUser: String? = FirebaseAuth.getInstance().currentUser?.uid
+    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         val view: View = LayoutInflater.from(mcontext).inflate(R.layout.user_search_item_layout,viewGroup,false)
-        return UserAdapter.ViewHolder(view)
+        return ViewHolder(view)
     }
 
     override fun getItemCount(): Int {
         return mUsers.size
     }
 
-    override fun onBindViewHolder(holder: UserAdapter.ViewHolder, i: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, i: Int) {
         val user: Users = mUsers[i]
         holder.usernameTxt.text = user.username
         Picasso.get().load(user.profile).placeholder(R.drawable.blank_profile_picture).into(holder.profileImageView)
-        checkAddFriendStatus(user.uid,holder.addFriendButton)
-        if (!(firebaseUser)!!.equals(user.uid)){
 
-            holder.addFriendButton.setOnClickListener{
-                if (holder.addFriendButton.text.toString()== "Add Friend"){
-                    firebaseUser?.uid.let {it ->
-                        FirebaseDatabase.getInstance().reference
-                            .child("Add Friend").child(it.toString())
-                            .child("Receive").child(user.uid)
-                            .setValue(true)
-
-                    }
-                }
-                else{
-
-                        firebaseUser?.uid.let {it ->
-                            FirebaseDatabase.getInstance().reference
-                                .child("Add Friend").child(it.toString())
-                                .child("Receive").child(user.uid)
-                                .removeValue()
-
-                        }
+        holder.addFriendButton.setOnClickListener{
+            if (holder.addFriendButton.text.toString()== "Add Friend"){
+                firebaseUser?.let {it ->
+                    FirebaseDatabase.getInstance().reference
+                        .child("Add Friend").child(user.uid)
+                        .child("Receive").child(it)
+                        .setValue(true)
 
                 }
+                holder.addFriendButton.text = "Cancel"
+            }
+            else if (holder.addFriendButton.text.toString()== "Friend"){
+                firebaseUser?.let {it ->
+                    FirebaseDatabase.getInstance().reference
+                        .child("Confirm Friends").child(it)
+                        .child("Friends").child(user.uid)
+                        .setValue(true)
+                    FirebaseDatabase.getInstance().reference
+                        .child("Confirm Friends").child(user.uid)
+                        .child("Friends").child(it)
+                        .setValue(true)
+
+                }
+                holder.addFriendButton.text = "Friend"
             }
 
+            else {
+                firebaseUser?.let {it ->
+                    FirebaseDatabase.getInstance().reference
+                        .child("Add Friend").child(user.uid)
+                        .child("Receive").child(it)
+                        .removeValue()
+
+                }
+                holder.addFriendButton.text = "Add Friend"
+
+
+            }
+
+            if (firebaseUser != user.uid){
+                return@setOnClickListener
+            }
+            else{
+                holder.addFriendButton.visibility = INVISIBLE
+            }
+
+
+
+
         }
+
+
     }
 
     class ViewHolder(itemView: View):RecyclerView.ViewHolder(itemView) {
@@ -74,30 +95,6 @@ class UserAdapter(private val mcontext: Context, private val mUsers:List<Users>,
 
     }
 
-    private fun checkAddFriendStatus(uid: String,addFriend:Button){
-        val addFriendRef = firebaseUser?.uid.let { it->
-            FirebaseDatabase.getInstance().reference
-                .child("Add Friend").child(it.toString())
-                .child("Receive")
-        }
-        addFriendRef.addValueEventListener(object :ValueEventListener{
-            override fun onDataChange(p0: DataSnapshot) {
-                if (p0.child(uid).exists()){
-                    addFriend.text = "Cancel"
-                }
-                else{
-                    addFriend.text = "Add Friend"
-                }
-            }
-            override fun onCancelled(error: DatabaseError) {
-
-
-            }
-
-
-
-        })
-    }
 
 
 
