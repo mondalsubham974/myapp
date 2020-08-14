@@ -1,50 +1,67 @@
 package com.example.myapplication
 
-import android.content.Context
+import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import com.squareup.picasso.Picasso
-import de.hdodenhof.circleimageview.CircleImageView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 
-class FriendAdapter(private val mcontext: Context, private val friendList:List<String>,
-                    private val isChatCheck:Boolean):RecyclerView.Adapter<FriendAdapter.ViewHolder?>() {
-    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(mcontext).inflate(R.layout.activity_friend_item_layout, viewGroup, false)
-        return ViewHolder(view)
+
+class FriendFragment : Fragment() {
+    private var recyclerView: RecyclerView? = null
+    private var friendList: ArrayList<String>? = null
+    private val mUsersDatabase: DatabaseReference? = null
+    private var mDatabaseReference: DatabaseReference? = null
+    private var mAuth: FirebaseAuth? = null
+    private var firebaseUser: String? = null
+    private var mFriendAdapter: FriendAdapter? = null
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        val view = inflater.inflate(R.layout.fragment_friend_request, container, false)
+        recyclerView = view.findViewById(R.id.friend_list)
+        recyclerView?.setHasFixedSize(true)
+        recyclerView?.layoutManager = LinearLayoutManager(context)
+
+        firebaseUser = FirebaseAuth.getInstance().currentUser!!.uid
+
+        //I just made the line below pull from the right data source.
+        mDatabaseReference = FirebaseDatabase.getInstance().reference.child("Confirm Friends/${firebaseUser}/Friends")
+        friendList = ArrayList()
+        friend()
+        return view
     }
 
-    override fun getItemCount(): Int {
-        return friendList.size
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, i: Int) {
-        val user = friendList[i]
-        val dbRef = FirebaseDatabase.getInstance().reference.child("User/$user")
-        dbRef.addListenerForSingleValueEvent(object : ValueEventListener {
+    private fun friend() {
+        mDatabaseReference!!.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {}
 
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val confirmFriendUser = snapshot.getValue(Users::class.java)
-                holder.usernameTxt.text = confirmFriendUser!!.username
-                Picasso.get().load(confirmFriendUser.profile).placeholder(R.drawable.blank_profile_picture).into(holder.profileImageView)
+            override fun onDataChange(p0: DataSnapshot) {
+                //TODO: this line below is not necessary
+
+                for (snapshot in p0.children){
+                    //I also made it just get the key, since the key is the userId that we need.
+                    val user = snapshot.key!!
+                    Log.d("CHUKA", " uuu -> $user")
+                    if (firebaseUser != user){
+                        friendList!!.add(user)
+                    }
+                }
+
+                mFriendAdapter = FriendAdapter(context!!,friendList!! ,false)
+                recyclerView?.adapter = mFriendAdapter
             }
         })
     }
-    class ViewHolder(itemView: View):RecyclerView.ViewHolder(itemView) {
-        var usernameTxt: TextView = itemView.findViewById(R.id.activity_user_item_layout_username)
-        var profileImageView: CircleImageView = itemView.findViewById(R.id.activity_user_item_layout_ProfileImage)
-        var onlineImageView: CircleImageView = itemView.findViewById(R.id.activity_user_item_layout_online)
-        var offlineImageView: CircleImageView = itemView.findViewById(R.id.activity_user_item_layout_offline)
-        var lastMessageTxt: TextView = itemView.findViewById(R.id.activity_user_item_layout_lastMessage)
-        var addFriendButton: Button = itemView.findViewById(R.id.add_friend)
 
-    }
+
+
 }
