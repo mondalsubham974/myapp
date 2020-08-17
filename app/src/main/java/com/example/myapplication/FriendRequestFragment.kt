@@ -32,7 +32,6 @@ class FriendRequestFragment : Fragment() {
         recyclerView?.layoutManager = LinearLayoutManager(context)
 
         firebaseUser = FirebaseAuth.getInstance().currentUser!!.uid
-
         //I just made the line below pull from the right data source.
         mDatabaseReference = FirebaseDatabase.getInstance().reference.child("Add Friend/${firebaseUser}/Receive")
         requestList = ArrayList()

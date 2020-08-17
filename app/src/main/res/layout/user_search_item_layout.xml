@@ -11,7 +11,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="4dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
         android:src="@drawable/blank_profile_picture"
@@ -38,7 +38,7 @@
         android:layout_width="14dp"
         android:layout_height="14dp"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="52dp"
+        android:layout_marginStart="64dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:src="@drawable/blank_profile_picture"
@@ -47,15 +47,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.977"
-        android:visibility="gone"/>
+        app:layout_constraintVertical_bias="0.977" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/activity_user_item_layout_offline"
         android:layout_width="14dp"
         android:layout_height="14dp"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="52dp"
+        android:layout_marginStart="64dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:src="@drawable/blank_profile_picture"
@@ -65,7 +64,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.977"
-        />
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/activity_user_item_layout_lastMessage"
@@ -85,7 +84,7 @@
         android:id="@+id/add_friend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="236dp"
+        android:layout_marginStart="220dp"
         android:layout_marginTop="8dp"
         android:text="Add Friend"
         android:textStyle="bold"

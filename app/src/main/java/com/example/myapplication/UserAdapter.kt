@@ -1,17 +1,17 @@
 package com.example.myapplication
 
 import android.content.Context
-import android.content.Intent.getIntent
+import android.content.DialogInterface
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
@@ -34,6 +34,26 @@ class UserAdapter(private val mcontext: Context, private val mUsers:List<Users>,
         holder.usernameTxt.text = user.username
         Picasso.get().load(user.profile).placeholder(R.drawable.blank_profile_picture).into(holder.profileImageView)
 
+        holder.itemView.setOnClickListener {
+            val option = arrayOf<CharSequence>(
+                "Send Message",
+                "Visit Profile"
+            )
+            val builder:AlertDialog.Builder = AlertDialog.Builder(mcontext)
+            builder.setTitle("What do you want?")
+            builder.setItems(option, DialogInterface.OnClickListener{dialog, position ->
+                if (position == 0){
+                    val intent = Intent(mcontext,MessageChatActivity::class.java)
+                    intent.putExtra("Visit_id",user.uid)
+                    mcontext.startActivity(intent)
+
+                }
+                if (position == 1){
+
+                }
+            })
+            builder.show()
+        }
         holder.addFriendButton.setOnClickListener{
             if (holder.addFriendButton.text.toString()== "Add Friend"){
                 firebaseUser?.let {it ->
@@ -45,7 +65,20 @@ class UserAdapter(private val mcontext: Context, private val mUsers:List<Users>,
                 }
                 holder.addFriendButton.text = "Cancel"
             }
+            else if (holder.addFriendButton.text.toString()== "Add Friend"){
+                firebaseUser?.let {it ->
+                    FirebaseDatabase.getInstance().reference
+                        .child("Confirm Friends").child(it)
+                        .child("Friends").child(user.uid)
+                        .setValue(true)
+                    FirebaseDatabase.getInstance().reference
+                        .child("Confirm Friends").child(user.uid)
+                        .child("Friends").child(it)
+                        .setValue(true)
 
+                }
+                holder.addFriendButton.text = "Friend"
+            }
 
             else {
                 firebaseUser?.let {it ->

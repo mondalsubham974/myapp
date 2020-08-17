@@ -1,17 +1,14 @@
 ﻿package com.example.myapplication
 
-import android.app.ProgressDialog
+//RequestAdapter
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
@@ -44,13 +41,17 @@ class RequestAdapter(private var context: Context, private val requestList:List<
             override fun onDataChange(snapshot: DataSnapshot) {
                 val friendUser = snapshot.getValue(Users::class.java)
                 holder.displayName.text = friendUser!!.username
-
+                Picasso.get().load(friendUser.profile).placeholder(R.drawable.blank_profile_picture).into(holder.displayImage)
                 holder.confirmFriendButton.setOnClickListener{
 
                     firebaseUser?.let {
                         FirebaseDatabase.getInstance().reference
                             .child("Confirm Friends").child(it)
                             .child("Friends").child(friendUser.uid)
+                            .setValue(true)
+                        FirebaseDatabase.getInstance().reference
+                            .child("Confirm Friends").child(friendUser.uid)
+                            .child("Friends").child(it)
                             .setValue(true)
                         FirebaseDatabase.getInstance().reference
                             .child("Add Friend").child(it)

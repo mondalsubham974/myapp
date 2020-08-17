@@ -11,16 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [FriendRequestFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class FriendFragment : Fragment() {
     private var recyclerView: RecyclerView? = null
     private var friendList: ArrayList<String>? = null
@@ -43,7 +34,7 @@ class FriendFragment : Fragment() {
         firebaseUser = FirebaseAuth.getInstance().currentUser!!.uid
 
         //I just made the line below pull from the right data source.
-        mDatabaseReference = FirebaseDatabase.getInstance().reference.child(firebaseUser!!)
+        mDatabaseReference = FirebaseDatabase.getInstance().reference.child("Confirm Friends/${firebaseUser}/Friends")
         friendList = ArrayList()
         friend()
         return view
@@ -55,7 +46,7 @@ class FriendFragment : Fragment() {
 
             override fun onDataChange(p0: DataSnapshot) {
                 //TODO: this line below is not necessary
-                //(requestList as ArrayList<Users>).clear()
+
                 for (snapshot in p0.children){
                     //I also made it just get the key, since the key is the userId that we need.
                     val user = snapshot.key!!
@@ -65,7 +56,7 @@ class FriendFragment : Fragment() {
                     }
                 }
 
-                mFriendAdapter = FriendAdapter(context!!,friendList!!,false)
+                mFriendAdapter = FriendAdapter(context!!,friendList!! ,false)
                 recyclerView?.adapter = mFriendAdapter
             }
         })
