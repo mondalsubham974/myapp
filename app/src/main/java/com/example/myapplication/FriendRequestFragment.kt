@@ -2,6 +2,7 @@ package com.example.myapplication
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +15,7 @@ import com.google.firebase.database.*
 
 class FriendRequestFragment : Fragment() {
     private var recyclerView: RecyclerView? = null
-    private var requestList: List<Users>? = null
+    private var requestList: ArrayList<String>? = null
     private var mDatabaseReference: DatabaseReference? = null
     private val mUsersDatabase: DatabaseReference? = null
     private val mMessageDatabase: DatabaseReference? = null
@@ -31,43 +32,35 @@ class FriendRequestFragment : Fragment() {
         recyclerView?.layoutManager = LinearLayoutManager(context)
 
         firebaseUser = FirebaseAuth.getInstance().currentUser!!.uid
-        mDatabaseReference = FirebaseDatabase.getInstance().reference.child("Sent")
-
+        //I just made the line below pull from the right data source.
+        mDatabaseReference = FirebaseDatabase.getInstance().reference.child("Add Friend/${firebaseUser}/Receive")
         requestList = ArrayList()
         friendRequest()
         return view
     }
 
 
-
     private fun friendRequest() {
 
         mDatabaseReference!!.addListenerForSingleValueEvent(object : ValueEventListener{
-            override fun onCancelled(error: DatabaseError) {
-
-            }
+            override fun onCancelled(error: DatabaseError) {}
 
             override fun onDataChange(p0: DataSnapshot) {
-                (requestList as ArrayList<Users>).clear()
+                //TODO: this line below is not necessary
+                //(requestList as ArrayList<Users>).clear()
                 for (snapshot in p0.children){
-                    val user: Users = snapshot.getValue(Users::class.java)!!
-                    if (firebaseUser != user.uid){
-                        (requestList as ArrayList<Users>).add(user)
+                    //I also made it just get the key, since the key is the userId that we need.
+                    val user = snapshot.key!!
+                    Log.d("CHUKA", " uuu -> $user")
+                    if (firebaseUser != user){
+                        requestList!!.add(user)
                     }
                 }
 
-
-
                 mRequestAdapter = RequestAdapter(context!!,requestList!!,false)
                 recyclerView?.adapter = mRequestAdapter
-
             }
-
-
         })
-
-
-
     }
 
 
