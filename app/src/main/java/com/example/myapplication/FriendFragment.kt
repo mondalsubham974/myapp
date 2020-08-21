@@ -20,21 +20,24 @@ class FriendFragment : Fragment() {
     private var mAuth: FirebaseAuth? = null
     private var firebaseUser: String? = null
     private var mFriendAdapter: FriendAdapter? = null
-
+    var userIdVisit:String= ""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_friend_request, container, false)
+        val view = inflater.inflate(R.layout.fragment_friend, container, false)
         recyclerView = view.findViewById(R.id.friend_list)
         recyclerView?.setHasFixedSize(true)
         recyclerView?.layoutManager = LinearLayoutManager(context)
 
+
         firebaseUser = FirebaseAuth.getInstance().currentUser!!.uid
 
         //I just made the line below pull from the right data source.
-        mDatabaseReference = FirebaseDatabase.getInstance().reference.child("Confirm Friends/${firebaseUser}/Friends")
+        mDatabaseReference =
+            FirebaseDatabase.getInstance().reference.child("Confirm Friends/${firebaseUser}/Friends")
+
         friendList = ArrayList()
         friend()
         return view
@@ -47,21 +50,22 @@ class FriendFragment : Fragment() {
             override fun onDataChange(p0: DataSnapshot) {
                 //TODO: this line below is not necessary
 
-                for (snapshot in p0.children){
+                for (snapshot in p0.children) {
                     //I also made it just get the key, since the key is the userId that we need.
                     val user = snapshot.key!!
                     Log.d("CHUKA", " uuu -> $user")
-                    if (firebaseUser != user){
+                    if (firebaseUser != user) {
                         friendList!!.add(user)
                     }
                 }
 
-                mFriendAdapter = FriendAdapter(context!!,friendList!! ,false)
+                mFriendAdapter = FriendAdapter(context!!, friendList!!, false)
                 recyclerView?.adapter = mFriendAdapter
             }
         })
     }
-
-
-
 }
+
+
+
+

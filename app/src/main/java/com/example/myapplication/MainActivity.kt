@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         viewPagerAdapter.addFragment(SearchFragment(),"Search")
         viewPagerAdapter.addFragment(FriendRequestFragment(),"Request")
         viewPagerAdapter.addFragment(FriendFragment(),"Friend")
-        viewPagerAdapter.addFragment(SettingsFragment(),"Settings")
+        viewPagerAdapter.addFragment(StoriesFragment(),"Stories")
 
 
         viewPager.adapter = viewPagerAdapter
@@ -91,6 +91,11 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
 
+            R.id.action_Settings -> {
+                val intent = Intent(this, SettingsActivity::class.java)
+                startActivity(intent)
+                return true
+            }
         }
         return false
 

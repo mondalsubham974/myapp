@@ -39,12 +39,9 @@ class FriendAdapter(private val mcontext: Context, private val friendList:List<S
         })
     }
     class ViewHolder(itemView: View):RecyclerView.ViewHolder(itemView) {
-        var usernameTxt: TextView = itemView.findViewById(R.id.activity_user_item_layout_username)
-        var profileImageView: CircleImageView = itemView.findViewById(R.id.activity_user_item_layout_ProfileImage)
-        var onlineImageView: CircleImageView = itemView.findViewById(R.id.activity_user_item_layout_online)
-        var offlineImageView: CircleImageView = itemView.findViewById(R.id.activity_user_item_layout_offline)
-        var lastMessageTxt: TextView = itemView.findViewById(R.id.activity_user_item_layout_lastMessage)
-        var addFriendButton: Button = itemView.findViewById(R.id.add_friend)
+        var usernameTxt: TextView = itemView.findViewById(R.id.activity_friend_item_layout_username)
+        var profileImageView: CircleImageView = itemView.findViewById(R.id.activity_friend_item_layout_ProfileImage)
+
 
     }
 }

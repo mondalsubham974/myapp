@@ -33,15 +33,14 @@ class UserAdapter(private val mcontext: Context, private val mUsers:List<Users>,
         val user: Users = mUsers[i]
         holder.usernameTxt.text = user.username
         Picasso.get().load(user.profile).placeholder(R.drawable.blank_profile_picture).into(holder.profileImageView)
-
         holder.itemView.setOnClickListener {
             val option = arrayOf<CharSequence>(
                 "Send Message",
                 "Visit Profile"
             )
-            val builder:AlertDialog.Builder = AlertDialog.Builder(mcontext)
+            val builder: AlertDialog.Builder = AlertDialog.Builder(mcontext)
             builder.setTitle("What do you want?")
-            builder.setItems(option, DialogInterface.OnClickListener{dialog, position ->
+            builder.setItems(option, DialogInterface.OnClickListener{ dialog, position ->
                 if (position == 0){
                     val intent = Intent(mcontext,MessageChatActivity::class.java)
                     intent.putExtra("Visit_id",user.uid)
@@ -54,6 +53,7 @@ class UserAdapter(private val mcontext: Context, private val mUsers:List<Users>,
             })
             builder.show()
         }
+
         holder.addFriendButton.setOnClickListener{
             if (holder.addFriendButton.text.toString()== "Add Friend"){
                 firebaseUser?.let {it ->
@@ -62,10 +62,11 @@ class UserAdapter(private val mcontext: Context, private val mUsers:List<Users>,
                         .child("Receive").child(it)
                         .setValue(true)
 
+
                 }
                 holder.addFriendButton.text = "Cancel"
             }
-            else if (holder.addFriendButton.text.toString()== "Add Friend"){
+            else if (holder.addFriendButton.text.toString()== "Friend"){
                 firebaseUser?.let {it ->
                     FirebaseDatabase.getInstance().reference
                         .child("Confirm Friends").child(it)
@@ -106,6 +107,7 @@ class UserAdapter(private val mcontext: Context, private val mUsers:List<Users>,
         }
 
 
+
     }
 
     class ViewHolder(itemView: View):RecyclerView.ViewHolder(itemView) {
@@ -117,8 +119,4 @@ class UserAdapter(private val mcontext: Context, private val mUsers:List<Users>,
         var addFriendButton: Button = itemView.findViewById(R.id.add_friend)
 
     }
-
-
-
-
 }

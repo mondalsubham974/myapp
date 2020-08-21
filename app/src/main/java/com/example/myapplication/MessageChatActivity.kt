@@ -48,11 +48,10 @@ class MessageChatActivity : AppCompatActivity() {
             }
 
             override fun onDataChange(p0: DataSnapshot) {
-                if (p0.exists()) {
-                    val user:Users? = p0.getValue(Users::class.java)
+                val user:Users? = p0.getValue(Users::class.java)
                     mchat_username.text = user?.username
                     Picasso.get().load(user?.profile).into(mchat_profile)
-                }
+
 
 
 

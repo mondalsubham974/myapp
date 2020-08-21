@@ -1,22 +1,15 @@
 package com.example.myapplication
 
-
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
-
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
+import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Log
+import android.widget.Toast
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
@@ -27,12 +20,12 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_settings.view.*
+import kotlinx.android.synthetic.main.activity_register.*
+import kotlinx.android.synthetic.main.activity_settings.*
 import java.util.*
 import kotlin.collections.HashMap
 
-
-class SettingsFragment : Fragment() {
+class SettingsActivity : AppCompatActivity() {
 
     var usersReference: DatabaseReference? = null
     var firebaseUser: FirebaseUser? = null
@@ -40,31 +33,26 @@ class SettingsFragment : Fragment() {
     private var imageUri: Uri? = null
     private var storageRef: StorageReference? = null
     private var coverChecker: String? = ""
-    private var mCurrent_state: String? = null
-    var mfriendReqReference: DatabaseReference? = null
-    var mDatabaseReference: DatabaseReference? = null
-    var mFriendDatabase: DatabaseReference? = null
-    var mNotificationReference: DatabaseReference? = null
-    var mRootReference: DatabaseReference? = null
-    var getmDatabaseReference: DatabaseReference? = null
-    var mFirebaseUser: FirebaseUser? = null
-    var user_id: String? = null
+    private var recyclerView: RecyclerView? = null
 
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-// Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_settings, container, false)
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_settings)
+
+    edit_button.setOnClickListener {
+        val intent = Intent(this,SettingBioActivity::class.java)
+        startActivity(intent)
+    }
         storageRef = FirebaseStorage.getInstance().reference.child("User Images")
         firebaseUser = FirebaseAuth.getInstance().currentUser
 
         val refUser = FirebaseDatabase.getInstance().reference.child("User").child(firebaseUser!!.uid)
 
 
-        refUser.addListenerForSingleValueEvent(object :ValueEventListener{
+
+        refUser.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
 
             }
@@ -72,30 +60,32 @@ class SettingsFragment : Fragment() {
             override fun onDataChange(p0: DataSnapshot) {
                 if (p0.exists()) {
                     val user:Users? = p0.getValue(Users::class.java)
-                    if (context != null){
-                        view.settings_username.text = user!!.username
-                        Picasso.get().load(user.profile).into(view.settings_profile)
-                        Picasso.get().load(user.cover).into(view.settings_cover)
+
+                        settings_username.text = user!!.username
+                        Picasso.get().load(user.profile).into(settings_profile)
+                        Picasso.get().load(user.cover).into(settings_cover)
                     }
 
-                }
+
+
             }
 
         })
-        view.settings_profile.setOnClickListener {
+        settings_profile.setOnClickListener {
             pickImage()
         }
-        view.settings_cover.setOnClickListener {
+        settings_cover.setOnClickListener {
             coverChecker = "cover"
             pickImage()
         }
-        return view
+
+
     }
 
     private fun pickImage() {
         val intent = Intent()
         intent.type = "image/*"
-        intent.action = Intent.ACTION_GET_CONTENT
+        intent.action = Intent.ACTION_PICK
         startActivityForResult(intent,RequestCode)
     }
 
@@ -104,13 +94,13 @@ class SettingsFragment : Fragment() {
 
         if (requestCode == RequestCode && resultCode == Activity.RESULT_OK && data!!.data != null){
             imageUri = data.data
-            Toast.makeText(context, "Uploading...",Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Uploading...", Toast.LENGTH_LONG).show()
             UploadImageToDatabase()
         }
     }
 
     private fun UploadImageToDatabase() {
-        val progressBar = ProgressDialog(context)
+        val progressBar = ProgressDialog(this)
         progressBar.setMessage("image is uploading, please wait....")
         progressBar.show()
 
@@ -148,11 +138,11 @@ class SettingsFragment : Fragment() {
                     }
                     progressBar.dismiss()
                 }
+
             }
         }
     }
 
+
+
 }
-
-
-

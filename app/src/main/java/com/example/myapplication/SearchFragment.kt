@@ -32,7 +32,7 @@ class SearchFragment : Fragment() {
     private var mUsers: List<Users>? = null
     private var recyclerView: RecyclerView? = null
     private var searchEditText: EditText? =null
-    private var mProfileSendReqButton: Button? =null
+
 
 
 

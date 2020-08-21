@@ -53,12 +53,16 @@ class RegisterActivity : AppCompatActivity() {
                         userHashMap["uid"] = firebaseUserId
                         userHashMap["username"] = username
                         userHashMap["search"] = username.toLowerCase()
-                        userHashMap["status"] = "offline"
+                        userHashMap["status"] = ""
                         userHashMap["profile"] = "https://firebasestorage.googleapis.com/v0/b/kotha1.appspot.com/o/blank_profile_picture.png?alt=media&token=83baffd3-722b-48ae-9c71-1d21207182b2"
                         userHashMap["cover"] = "https://firebasestorage.googleapis.com/v0/b/kotha1.appspot.com/o/cover_profile_image.png?alt=media&token=4098ee58-d5e0-4c86-965e-705983178eac"
-                        userHashMap["friends"] = "friend"
-                        userHashMap["unfriend"] = "unfriend"
-                        userHashMap["request_type"] = "sent"
+                        userHashMap["brithday"] = ""+"/"+""+"/"+""
+                        userHashMap["hometown"] = "bankura"
+                        userHashMap["country"] = "sent"
+                        userHashMap["relegion"] = "sent"
+                        userHashMap["Relationship"] = "sent"
+                        userHashMap["Profesion"] = "sent"
+                        userHashMap["online"] = "true"
 
                         refUser.updateChildren(userHashMap).addOnCompleteListener {task ->
                             if (task.isSuccessful){
