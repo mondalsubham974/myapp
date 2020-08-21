@@ -8,8 +8,8 @@
         android:title="Sign Out"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_friends"
+        android:id="@+id/action_Settings"
         android:orderInCategory="100"
-        android:title="Friends"
+        android:title="Settings"
         app:showAsAction="never"/>
 </menu>
