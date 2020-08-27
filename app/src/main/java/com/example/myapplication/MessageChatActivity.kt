@@ -1,6 +1,5 @@
 package com.example.myapplication
 
-import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
@@ -8,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.tasks.Continuation
@@ -19,15 +17,11 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.core.Tag
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_message_chat.*
-import kotlinx.android.synthetic.main.activity_visit_profile.*
-import kotlin.math.log
 
 
 class MessageChatActivity : AppCompatActivity() {
@@ -53,7 +47,7 @@ class MessageChatActivity : AppCompatActivity() {
 
         mchat_recyclerview = findViewById(R.id.mchat_recyclerview)
         mchat_recyclerview.setHasFixedSize(true)
-        var linearLayoutManager = LinearLayoutManager(applicationContext)
+        val linearLayoutManager = LinearLayoutManager(applicationContext)
         linearLayoutManager.stackFromEnd = true
         mchat_recyclerview.layoutManager = linearLayoutManager
 
@@ -72,7 +66,7 @@ class MessageChatActivity : AppCompatActivity() {
                     Log.d("MainActivity", "user->${user?.username}")
                     Picasso.get().load(user?.profile).placeholder(R.drawable.blank_profile_picture).into(mchat_profile)
 
-                    retrieveMessages(firebaseUser,userIdVisit,user!!.profile)
+                    retrieveMessages(firebaseUser!!.uid,userIdVisit,user!!.profile)
                 }
             }
 
@@ -100,7 +94,7 @@ class MessageChatActivity : AppCompatActivity() {
         }
     }
 
-    private fun retrieveMessages(uid: FirebaseUser?, userIdVisit: String?, reciverimageurl: String) {
+    private fun retrieveMessages(senderId: String, receiverId: String?, reciverimageurl: String) {
         mChatList = ArrayList()
         val reference = FirebaseDatabase.getInstance().reference.child("Chats")
         reference.addValueEventListener(object : ValueEventListener{
@@ -108,14 +102,15 @@ class MessageChatActivity : AppCompatActivity() {
                 (mChatList as ArrayList<Chat>).clear()
                 for (snapshot in p0.children){
                     val chat = snapshot.getValue(Chat::class.java)
-                    if (chat!!.receiver.equals(uid) && chat.sender.equals(userIdVisit) ||
-                            chat.receiver.equals(userIdVisit) && chat.sender.equals(uid)){
-                                (mChatList as ArrayList<Chat>).add(chat)
-                        Log.d("msg","uid->$uid")
-                        Log.d("msg","reciver->$userIdVisit")
+                    if (chat!!.receiver.equals(senderId) && chat.sender.equals(receiverId) ||
+                        chat.receiver.equals(receiverId) && chat.sender.equals(senderId)){
+                        (mChatList as ArrayList<Chat>).add(chat)
+                        Log.d("msgeeee","reciver->$receiverId")
+                        Log.d("msgeeee","uid->${senderId}")
+
                     }
-                     ChatAdapter = ChatAdapter(this@MessageChatActivity,(mChatList as ArrayList<Chat>),reciverimageurl)
-                     mchat_recyclerview.adapter = ChatAdapter
+                    ChatAdapter = ChatAdapter(this@MessageChatActivity,(mChatList as ArrayList<Chat>),reciverimageurl)
+                    mchat_recyclerview.adapter = ChatAdapter
                 }
             }
 
@@ -125,6 +120,7 @@ class MessageChatActivity : AppCompatActivity() {
 
         })
     }
+
 
     private fun sendMessageToUser(senderId: String, receiverId: String?, msg: String) {
         val reference = FirebaseDatabase.getInstance().reference
