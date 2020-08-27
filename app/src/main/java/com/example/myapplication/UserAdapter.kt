@@ -34,24 +34,12 @@ class UserAdapter(private val mcontext: Context, private val mUsers:List<Users>,
         holder.usernameTxt.text = user.username
         Picasso.get().load(user.profile).placeholder(R.drawable.blank_profile_picture).into(holder.profileImageView)
         holder.itemView.setOnClickListener {
-            val option = arrayOf<CharSequence>(
-                "Send Message",
-                "Visit Profile"
-            )
-            val builder: AlertDialog.Builder = AlertDialog.Builder(mcontext)
-            builder.setTitle("What do you want?")
-            builder.setItems(option, DialogInterface.OnClickListener{ dialog, position ->
-                if (position == 0){
-                    val intent = Intent(mcontext,MessageChatActivity::class.java)
-                    intent.putExtra("Visit_id",user.uid)
-                    mcontext.startActivity(intent)
 
-                }
-                if (position == 1){
+            val intent = Intent(mcontext,VisitProfileActivity::class.java)
+            intent.putExtra("Visit_id",user.uid)
+            mcontext.startActivity(intent)
 
-                }
-            })
-            builder.show()
+
         }
 
         holder.addFriendButton.setOnClickListener{

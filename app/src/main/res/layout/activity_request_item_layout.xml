@@ -39,6 +39,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:text="Confirm"
+        android:textAllCaps="false"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/activity_request_item_layout_ProfileImage"
         app:layout_constraintTop_toBottomOf="@+id/activity_request_item_layout_username" />
@@ -49,6 +51,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:text="Cancel"
+        android:textAllCaps="false"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/activity_request_item_layout_confirm_friend"
         app:layout_constraintTop_toTopOf="@+id/activity_request_item_layout_confirm_friend" />

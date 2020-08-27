@@ -8,7 +8,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.webkit.MimeTypeMap
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
@@ -33,9 +38,6 @@ class SettingsActivity : AppCompatActivity() {
     private var imageUri: Uri? = null
     private var storageRef: StorageReference? = null
     private var coverChecker: String? = ""
-    private var recyclerView: RecyclerView? = null
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +47,7 @@ class SettingsActivity : AppCompatActivity() {
         val intent = Intent(this,SettingBioActivity::class.java)
         startActivity(intent)
     }
+        usersReference = FirebaseDatabase.getInstance().reference.child("User/${FirebaseAuth.getInstance().currentUser!!.uid}")
         storageRef = FirebaseStorage.getInstance().reference.child("User Images")
         firebaseUser = FirebaseAuth.getInstance().currentUser
 
@@ -62,8 +65,8 @@ class SettingsActivity : AppCompatActivity() {
                     val user:Users? = p0.getValue(Users::class.java)
 
                         settings_username.text = user!!.username
-                        Picasso.get().load(user.profile).into(settings_profile)
-                        Picasso.get().load(user.cover).into(settings_cover)
+                        Picasso.get().load(user.profile).placeholder(R.drawable.blank_profile_picture).into(settings_profile)
+                        Picasso.get().load(user.cover).placeholder(R.drawable.cover_profile_image).into(settings_cover)
                     }
 
 
@@ -104,45 +107,53 @@ class SettingsActivity : AppCompatActivity() {
         progressBar.setMessage("image is uploading, please wait....")
         progressBar.show()
 
-        if (imageUri != null){
-            val fileRef = storageRef!!.child(System.currentTimeMillis().toString()+".jpg")
 
-            val uploadTask: StorageTask<*>
-            uploadTask = fileRef.putFile(imageUri!!)
-            uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
-                if (!task.isSuccessful){
-                    task.exception?.let {
-                        throw it
+            if (imageUri != null) {
+                val bitmap =
+                    MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
+
+                val fileRef = storageRef!!.child(System.currentTimeMillis().toString() + "User Images")
+
+                val uploadTask: StorageTask<*>
+                uploadTask = fileRef.putFile(imageUri!!)
+                uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
+                    if (!task.isSuccessful) {
+                        task.exception?.let {
+                            throw it
 
 
+                        }
+
+                    }
+                    return@Continuation fileRef.downloadUrl
+                }).addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val downloadUrl = task.result
+                        val mUrl = downloadUrl.toString()
+
+                        if (coverChecker == "cover") {
+                            this.settings_cover.setImageBitmap(bitmap)
+                            val mapCoverImg = HashMap<String, Any>()
+                            mapCoverImg["cover"] = mUrl
+                            usersReference?.updateChildren(mapCoverImg)
+                            coverChecker = ""
+                        } else {
+                            this.settings_profile.setImageBitmap(bitmap)
+                            val mapProfileImg = HashMap<String, Any>()
+                            mapProfileImg["profile"] = mUrl
+                            usersReference?.updateChildren(mapProfileImg)
+                            coverChecker = ""
+                        }
+                        progressBar.dismiss()
                     }
 
                 }
-                return@Continuation fileRef.downloadUrl
-            }).addOnCompleteListener { task ->
-                if (task.isSuccessful){
-                    val downloadUrl = task.result
-                    val mUrl = downloadUrl.toString()
-
-                    if (coverChecker == "cover"){
-                        val mapCoverImg = HashMap<String, Any>()
-                        mapCoverImg["cover"] = mUrl
-                        usersReference?.updateChildren(mapCoverImg)
-                        coverChecker = ""
-                    }
-                    else{
-                        val mapProfileImg = HashMap<String, Any>()
-                        mapProfileImg["profile"] = mUrl
-                        usersReference?.updateChildren(mapProfileImg)
-                        coverChecker = ""
-                    }
-                    progressBar.dismiss()
-                }
-
             }
-        }
+
     }
 
 
-
 }
+
+
+

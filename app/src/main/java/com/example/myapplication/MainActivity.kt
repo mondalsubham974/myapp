@@ -2,6 +2,7 @@ package com.example.myapplication
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
@@ -27,7 +28,14 @@ class MainActivity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById(R.id.main_toolbar)
         setSupportActionBar(toolbar)
         supportActionBar!!.title = ""
-
+        main_profile.setOnClickListener {
+            val intent = Intent(this,SettingsActivity::class.java)
+            startActivity(intent)
+        }
+        main_username.setOnClickListener {
+            val intent = Intent(this,SettingsActivity::class.java)
+            startActivity(intent)
+        }
         val tabLayout: TabLayout = findViewById(R.id.main_tabLayout)
         val viewPager:ViewPager = findViewById(R.id.main_viewPager)
         val viewPagerAdapter = ViewPagerAdapter(supportFragmentManager)
@@ -53,9 +61,11 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onDataChange(p0: DataSnapshot) {
+                Log.d("MainActivity", "user->${p0.exists()}")
                 if (p0.exists()) {
                     val user:Users? = p0.getValue(Users::class.java)
                     main_username.text = user?.username
+                    Log.d("MainActivity", "user->${user?.username}")
                     Picasso.get().load(user?.profile).placeholder(R.drawable.blank_profile_picture).into(main_profile)
                 }
             }

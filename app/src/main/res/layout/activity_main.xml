@@ -39,13 +39,15 @@
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/main_tabLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            app:tabIndicatorColor="#FFFFFF" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/main_viewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:backgroundTint="@android:color/white"/>
 
     <include layout="@layout/content_main" />
 

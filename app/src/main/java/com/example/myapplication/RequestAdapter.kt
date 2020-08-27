@@ -1,12 +1,16 @@
 ﻿package com.example.myapplication
 
 //RequestAdapter
+import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -42,8 +46,15 @@ class RequestAdapter(private var context: Context, private val requestList:List<
                 val friendUser = snapshot.getValue(Users::class.java)
                 holder.displayName.text = friendUser!!.username
                 Picasso.get().load(friendUser.profile).placeholder(R.drawable.blank_profile_picture).into(holder.displayImage)
+                holder.itemView.setOnClickListener {
+                    val intent = Intent(context, VisitProfileActivity::class.java)
+                    intent.putExtra("Visit_id", friendUser.uid)
+                    context.startActivity(intent)
+                }
                 holder.confirmFriendButton.setOnClickListener{
-
+                    val progressBar = ProgressDialog(context)
+                    progressBar.setMessage("please wait....")
+                    progressBar.show()
                     firebaseUser?.let {
                         FirebaseDatabase.getInstance().reference
                             .child("Confirm Friends").child(it)
@@ -57,13 +68,16 @@ class RequestAdapter(private var context: Context, private val requestList:List<
                             .child("Add Friend").child(it)
                             .child("Receive").child(friendUser.uid)
                             .removeValue()
-
+                        progressBar.dismiss()
                         }
 
 
                     }
 
                 holder.cancelFriendButton.setOnClickListener{
+                    val progressBar = ProgressDialog(context)
+                    progressBar.setMessage("please wait....")
+                    progressBar.show()
                     firebaseUser?.let {it ->
                         FirebaseDatabase.getInstance().reference
                             .child("Add Friend").child(it)
@@ -71,7 +85,7 @@ class RequestAdapter(private var context: Context, private val requestList:List<
                             .removeValue()
 
                     }
-
+                    progressBar.show()
 
                 }
 
@@ -79,6 +93,7 @@ class RequestAdapter(private var context: Context, private val requestList:List<
 
             }
         })
+
     }
 
     override fun getItemCount(): Int {
