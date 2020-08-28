@@ -97,6 +97,7 @@ class MessageChatActivity : AppCompatActivity() {
     private fun retrieveMessages(senderId: String, receiverId: String?, reciverimageurl: String) {
         mChatList = ArrayList()
         val reference = FirebaseDatabase.getInstance().reference.child("Chats")
+        Log.d("msgeeee","reciver->$reference")
         reference.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(p0: DataSnapshot) {
                 (mChatList as ArrayList<Chat>).clear()

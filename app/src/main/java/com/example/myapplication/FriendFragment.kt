@@ -1,6 +1,8 @@
 package com.example.myapplication
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class FriendFragment : Fragment() {
@@ -40,9 +44,35 @@ class FriendFragment : Fragment() {
 
         friendList = ArrayList()
         friend()
+
+
+
         return view
     }
+    private fun searchForUsers(str : String){
+        val firebaseUserId = FirebaseAuth.getInstance().currentUser?.uid
+        val queryUser =FirebaseDatabase.getInstance().reference.child("User")
+            .orderByChild("search").startAt(str).endAt(str + "\uf8ff")
 
+        queryUser.addListenerForSingleValueEvent(object: ValueEventListener{
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+
+                for (snapshot in p0.children){
+                    val user= snapshot.key!!
+                    if (firebaseUser != user){
+                        friendList!!.add(user)
+                    }
+                }
+                mFriendAdapter = FriendAdapter(context!!,friendList!!,false)
+                recyclerView?.adapter = mFriendAdapter
+            }
+
+        })
+    }
     private fun friend() {
         mDatabaseReference!!.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {}
