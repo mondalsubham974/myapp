@@ -100,14 +100,12 @@ class MessageChatActivity : AppCompatActivity() {
         Log.d("msgeeee","reciver->$reference")
         reference.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(p0: DataSnapshot) {
-                (mChatList as ArrayList<Chat>).clear()
+
                 for (snapshot in p0.children){
                     val chat = snapshot.getValue(Chat::class.java)
-                    if (chat!!.receiver.equals(senderId) && chat.sender.equals(receiverId) ||
-                        chat.receiver.equals(receiverId) && chat.sender.equals(senderId)){
+                    if (chat!!.receiver == senderId && chat.sender == receiverId ||
+                        chat.receiver == receiverId && chat.sender.equals(senderId)){
                         (mChatList as ArrayList<Chat>).add(chat)
-                        Log.d("msgeeee","reciver->$receiverId")
-                        Log.d("msgeeee","uid->${senderId}")
 
                     }
                     ChatAdapter = ChatAdapter(this@MessageChatActivity,(mChatList as ArrayList<Chat>),reciverimageurl)

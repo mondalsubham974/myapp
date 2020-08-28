@@ -1,23 +1,16 @@
 package com.example.myapplication
 
 
-import android.app.ProgressDialog
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.INVISIBLE
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -70,7 +63,7 @@ class SearchFragment : Fragment() {
     private fun searchForUsers(str : String){
         val firebaseUserId = FirebaseAuth.getInstance().currentUser?.uid
         val queryUser =FirebaseDatabase.getInstance().reference.child("User")
-                .orderByChild("search").startAt(str).endAt(str + "\uf8ff")
+            .orderByChild("search").startAt(str).endAt(str + "\uf8ff")
 
         queryUser.addListenerForSingleValueEvent(object: ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
@@ -92,7 +85,7 @@ class SearchFragment : Fragment() {
         })
     }
     private fun retrieveAllUsers() {
-        val firebaseUserId = FirebaseAuth.getInstance().currentUser
+        val firebaseUserId = FirebaseAuth.getInstance().currentUser?.uid
         val refUsers = FirebaseDatabase.getInstance().reference.child("User")
         refUsers.addListenerForSingleValueEvent(object : ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
@@ -100,11 +93,11 @@ class SearchFragment : Fragment() {
             }
 
             override fun onDataChange(p0: DataSnapshot) {
-                (mUsers as ArrayList<Users>).clear()
+
                 if (searchEditText?.text.toString() == ""){
                     for (snapshot in p0.children){
                         val user: Users = snapshot.getValue(Users::class.java)!!
-                        if (!(firebaseUserId)!!.equals(user.uid)){
+                        if (firebaseUserId != user.uid){
                             (mUsers as ArrayList<Users>).add(user)
                         }
                     }
@@ -119,6 +112,3 @@ class SearchFragment : Fragment() {
     }
 
 }
-
-
-
