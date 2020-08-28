@@ -87,6 +87,8 @@
         android:layout_marginStart="220dp"
         android:layout_marginTop="8dp"
         android:text="Add Friend"
+        android:textSize="16sp"
+        android:textAllCaps="false"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/activity_user_item_layout_ProfileImage"
         app:layout_constraintTop_toTopOf="parent" />

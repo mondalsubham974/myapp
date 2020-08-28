@@ -11,7 +11,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="4dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:src="@drawable/blank_profile_picture"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,6 +27,19 @@
         android:text="User Name"
         android:textColor="@android:color/black"
         android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/activity_friend_item_layout_ProfileImage"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/unFriend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="242dp"
+        android:layout_marginTop="8dp"
+        android:text="Unfriend"
+        android:textAllCaps="false"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/activity_friend_item_layout_ProfileImage"
         app:layout_constraintTop_toTopOf="parent" />
