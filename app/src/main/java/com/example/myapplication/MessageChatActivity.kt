@@ -21,7 +21,11 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_message_chat.*
+import kotlinx.android.synthetic.main.message_item_left.*
+import kotlinx.android.synthetic.main.message_item_left.message_left_image
+import kotlinx.android.synthetic.main.message_item_right.*
 
 
 class MessageChatActivity : AppCompatActivity() {
@@ -34,9 +38,19 @@ class MessageChatActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_message_chat)
-        
-        mchat_profile.setOnClickListener{
+
+        mchat_profile.setOnClickListener {
             val intent = Intent(this,VisitProfileActivity::class.java)
+            intent.putExtra("Visit_id",userIdVisit)
+            this.startActivity(intent)
+        }
+        mchat_username.setOnClickListener {
+            val intent = Intent(this,VisitProfileActivity::class.java)
+            intent.putExtra("Visit_id",userIdVisit)
+            this.startActivity(intent)
+        }
+        message_right_image.setOnClickListener {
+            val intent = Intent(this,FullImageActivity::class.java)
             startActivity(intent)
         }
 
@@ -189,7 +203,7 @@ class MessageChatActivity : AppCompatActivity() {
                     val mUrl = downloadUrl.toString()
                     val messageHashMap = HashMap<String,Any?>()
                     messageHashMap["sender"] = firebaseUser!!.uid
-                    messageHashMap["message"] = "Sent You An Image."
+                    messageHashMap["message"] = ""
                     messageHashMap["receiver"] = userIdVisit
                     messageHashMap["isseen"] = false
                     messageHashMap["url"] = mUrl

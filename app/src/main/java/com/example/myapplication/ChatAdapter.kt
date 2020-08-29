@@ -45,17 +45,17 @@ class ChatAdapter(private val mcontext: Context, private val mChatList:List<Chat
         Picasso.get().load(imageUrl).into(holder.profileImage)
 
         //images messages righside
-        if (chat.message == "sent you an image." && chat.url != ""){
+        if (chat.message == "" && chat.url != ""){
             if (chat.sender == firebaseUser){
                 holder.showChat!!.visibility = View.GONE
                 holder.rightimage!!.visibility = View.VISIBLE
                 Picasso.get().load(chat.url).into(holder.rightimage)
-                Log.d("msg","msg->${chat.url}")
+                Log.d("msg","msg->${holder.rightimage}")
             }
             //images messages leftside
             else {
                 holder.showChat!!.visibility = View.GONE
-                holder.rightimage!!.visibility = View.VISIBLE
+                holder.leftimage!!.visibility = View.VISIBLE
                 Picasso.get().load(chat.url).into(holder.leftimage)
                 Log.d("msg","msg->${holder.leftimage}")
             }
@@ -100,7 +100,7 @@ class ChatAdapter(private val mcontext: Context, private val mChatList:List<Chat
     }
 
     override fun getItemViewType(i: Int): Int {
-        return if (mChatList[i].sender.equals(firebaseUser)){
+        return if (mChatList[i].sender == firebaseUser){
             1
         }
         else{
