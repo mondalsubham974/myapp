@@ -4,11 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ChatsFragment">
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/chat_list"
+    tools:context=".FullImageActivity">
+
+    <ImageView
+        android:id="@+id/full_image_visit_profile"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:background="@android:color/black" />
+
+
 
 
 </RelativeLayout>

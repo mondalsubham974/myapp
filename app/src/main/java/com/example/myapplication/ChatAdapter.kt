@@ -1,11 +1,11 @@
 package com.example.myapplication
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -14,6 +14,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.android.synthetic.main.activity_message_chat.*
+import kotlinx.android.synthetic.main.message_item_right.*
+import java.util.ArrayList
 
 class ChatAdapter(private val mcontext: Context, private val mChatList:List<Chat>,
                   private val imageUrl:String): RecyclerView.Adapter<ChatAdapter.ViewHolder?>() {

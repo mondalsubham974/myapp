@@ -13,23 +13,34 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".FullImageActivity">
+        <activity android:name=".FullImageVisitProfile">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".FullImageActivity" />
+        </activity>
+        <activity
+            android:name=".FullImageActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+        <activity
             android:name=".VisitProfileActivity"
             android:theme="@style/AppTheme.NoActionBar">
-        </activity>
 
-        <activity
-            android:name=".VisitProfileActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        </activity>
         <activity
             android:name=".SettingBioActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
         <activity
             android:name=".SettingsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MessageChatActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
         <activity
             android:name=".LoginActivity"
             android:theme="@style/AppTheme.NoActionBar" />

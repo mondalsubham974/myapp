@@ -52,20 +52,20 @@ class FriendAdapter(private val mcontext: Context, private val friendList:List<S
                     builder.setItems(option, DialogInterface.OnClickListener{ dialog, position ->
                         if (position == 0){
                             val intent = Intent(mcontext,MessageChatActivity::class.java)
-                            intent.putExtra("Visit_id",confirmFriendUser.uid)
+                            intent.putExtra("Visit_id",confirmFriendUser!!.uid)
                             mcontext.startActivity(intent)
 
                         }
                         if (position == 1){
                             val intent = Intent(mcontext, VisitProfileActivity::class.java)
-                            intent.putExtra("Visit_id", confirmFriendUser.uid)
+                            intent.putExtra("Visit_id", confirmFriendUser!!.uid)
                             mcontext.startActivity(intent)
                         }
                     })
                     builder.show()
 
                 }
-                holder.unFriend.setOnClickListener {
+                holder.unFriend!!.setOnClickListener {
 
                     val pB = ProgressDialog(mcontext)
 
@@ -79,7 +79,7 @@ class FriendAdapter(private val mcontext: Context, private val friendList:List<S
 
                             .child("Confirm Friends").child(it)
 
-                            .child("Friends").child(confirmFriendUser.uid)
+                            .child("Friends").child(confirmFriendUser!!.uid)
 
                             .removeValue()
 
@@ -110,7 +110,7 @@ class FriendAdapter(private val mcontext: Context, private val friendList:List<S
     class ViewHolder(itemView: View):RecyclerView.ViewHolder(itemView) {
         var usernameTxt: TextView = itemView.findViewById(R.id.activity_friend_item_layout_username)
         var profileImageView: CircleImageView = itemView.findViewById(R.id.activity_friend_item_layout_ProfileImage)
-        var unFriend: Button = itemView.findViewById(R.id.unFriend)
+        var unFriend: Button? = itemView.findViewById(R.id.unFriend)
 
     }
 

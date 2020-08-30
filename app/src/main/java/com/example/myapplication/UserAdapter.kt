@@ -31,6 +31,7 @@ class UserAdapter(private val mcontext: Context, private val mUsers:List<Users>,
 
     override fun onBindViewHolder(holder: ViewHolder, i: Int) {
         val user: Users = mUsers[i]
+
         holder.usernameTxt.text = user.username
         Picasso.get().load(user.profile).placeholder(R.drawable.blank_profile_picture).into(holder.profileImageView)
         holder.itemView.setOnClickListener {

@@ -13,19 +13,12 @@ import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_message_chat.*
-import kotlinx.android.synthetic.main.message_item_left.*
-import kotlinx.android.synthetic.main.message_item_left.message_left_image
-import kotlinx.android.synthetic.main.message_item_right.*
 
 
 class MessageChatActivity : AppCompatActivity() {
@@ -34,10 +27,16 @@ class MessageChatActivity : AppCompatActivity() {
     var firebaseUser:FirebaseUser? = null
     var ChatAdapter: ChatAdapter? = null
     var mChatList: List<Chat>? = null
+    var reference: DatabaseReference ? = null
     lateinit var mchat_recyclerview: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_message_chat)
+
+
+
+
+
 
         mchat_profile.setOnClickListener {
             val intent = Intent(this,VisitProfileActivity::class.java)
@@ -49,10 +48,7 @@ class MessageChatActivity : AppCompatActivity() {
             intent.putExtra("Visit_id",userIdVisit)
             this.startActivity(intent)
         }
-        message_right_image.setOnClickListener {
-            val intent = Intent(this,FullImageActivity::class.java)
-            startActivity(intent)
-        }
+
 
         intent = intent
         userIdVisit = intent.getStringExtra("Visit_id")
@@ -85,11 +81,7 @@ class MessageChatActivity : AppCompatActivity() {
             }
 
         })
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        mChat_toolbar.setNavigationOnClickListener {
-            val intent = Intent(this,FriendFragment::class.java)
-            startActivity(intent)
-        }
+
         send_btn.setOnClickListener{
             val msg = messageBox.text.toString()
             if (msg == ""){
@@ -106,13 +98,14 @@ class MessageChatActivity : AppCompatActivity() {
             intent.type = "image/*"
             startActivityForResult(Intent.createChooser(intent,"Pick image"),438)
         }
+
     }
 
     private fun retrieveMessages(senderId: String, receiverId: String?, reciverimageurl: String) {
         mChatList = ArrayList()
-        val reference = FirebaseDatabase.getInstance().reference.child("Chats")
+        reference = FirebaseDatabase.getInstance().reference.child("Chats")
         Log.d("msgeeee","reciver->$reference")
-        reference.addValueEventListener(object : ValueEventListener{
+        reference!!.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(p0: DataSnapshot) {
 
                 for (snapshot in p0.children){
@@ -122,6 +115,7 @@ class MessageChatActivity : AppCompatActivity() {
                         (mChatList as ArrayList<Chat>).add(chat)
 
                     }
+
                     ChatAdapter = ChatAdapter(this@MessageChatActivity,(mChatList as ArrayList<Chat>),reciverimageurl)
                     mchat_recyclerview.adapter = ChatAdapter
                 }
@@ -214,7 +208,9 @@ class MessageChatActivity : AppCompatActivity() {
                 }
                 progressBar.dismiss()
             }
+
         }
+
 
     }
 }
