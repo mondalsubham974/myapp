@@ -30,7 +30,7 @@ class ChatsFragment : Fragment() {
         firebaseUser = FirebaseAuth.getInstance().currentUser!!.uid
         userchatList = ArrayList()
 
-        val ref = FirebaseDatabase.getInstance().reference.child("ChatsList").child(firebaseUser!!)
+        val ref = FirebaseDatabase.getInstance().reference.child("ChatsList").child(firebaseUser.toString())
         ref.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(p0: DataSnapshot) {
                 (userchatList as  ArrayList).clear()
@@ -51,10 +51,10 @@ class ChatsFragment : Fragment() {
 
     private fun retrievechatlist(){
         chatfragmentList = ArrayList()
-        val ref = FirebaseDatabase.getInstance().reference.child("Confirm Friends").child(firebaseUser.toString())
+        val ref = FirebaseDatabase.getInstance().reference.child("Confirm Friends/${firebaseUser.toString()}/Friends")
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
-                (chatfragmentList as ArrayList).clear()
+
                 for (dataSnapshot in p0.children) {
                     val users = dataSnapshot.key
                     for (eachchatlist in userchatList!!) {
@@ -64,7 +64,7 @@ class ChatsFragment : Fragment() {
 
 
                 }
-                mchatlistadapter = ChatListAdapter(context!!, chatfragmentList!!, true)
+                mchatlistadapter = ChatListAdapter(context!!, chatfragmentList!!, false)
                 recyclerView!!.adapter = mchatlistadapter
             }
 

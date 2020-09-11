@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,6 +26,7 @@ class FriendFragment : Fragment() {
     private var firebaseUser: String? = null
     private var mFriendAdapter: FriendAdapter? = null
     var userIdVisit:String= ""
+    private var searchEditText: EditText? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,7 +36,7 @@ class FriendFragment : Fragment() {
         recyclerView = view.findViewById(R.id.friend_list)
         recyclerView?.setHasFixedSize(true)
         recyclerView?.layoutManager = LinearLayoutManager(context)
-
+        searchEditText = view.findViewById(R.id.friend_search_bar)
 
         firebaseUser = FirebaseAuth.getInstance().currentUser!!.uid
 
@@ -51,19 +53,19 @@ class FriendFragment : Fragment() {
     }
     private fun searchForUsers(str : String){
         val firebaseUserId = FirebaseAuth.getInstance().currentUser?.uid
-        val queryUser =FirebaseDatabase.getInstance().reference.child("User")
+        val queryUser =FirebaseDatabase.getInstance().reference.child("Confirm Friends").child(firebaseUser!!)
             .orderByChild("search").startAt(str).endAt(str + "\uf8ff")
-
+        Log.d("subham", " uuu -> $queryUser")
         queryUser.addListenerForSingleValueEvent(object: ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
 
             }
 
             override fun onDataChange(p0: DataSnapshot) {
-
+                (friendList as ArrayList<String>).clear()
                 for (snapshot in p0.children){
                     val user= snapshot.key!!
-                    if (firebaseUser != user){
+                    if (firebaseUser != user) {
                         friendList!!.add(user)
                     }
                 }
@@ -79,13 +81,16 @@ class FriendFragment : Fragment() {
 
             override fun onDataChange(p0: DataSnapshot) {
                 //TODO: this line below is not necessary
+                if (searchEditText?.text.toString() == ""){
+                    (friendList as ArrayList<String>).clear()
+                    for (snapshot in p0.children) {
+                        //I also made it just get the key, since the key is the userId that we need.
+                        val user = snapshot.key!!
+                        Log.d("CHUKA", " uuu -> $user")
+                        if (firebaseUser != user) {
+                            friendList!!.add(user)
+                        }
 
-                for (snapshot in p0.children) {
-                    //I also made it just get the key, since the key is the userId that we need.
-                    val user = snapshot.key!!
-                    Log.d("CHUKA", " uuu -> $user")
-                    if (firebaseUser != user) {
-                        friendList!!.add(user)
                     }
                 }
 

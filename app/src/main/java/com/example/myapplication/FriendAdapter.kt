@@ -4,6 +4,7 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,11 +36,13 @@ class FriendAdapter(private val mcontext: Context, private val friendList:List<S
     override fun onBindViewHolder(holder: ViewHolder, i: Int) {
         val user = friendList[i]
         val dbRef = FirebaseDatabase.getInstance().reference.child("User/$user")
+        Log.d("Bankura", "user->${user}")
         dbRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {}
 
             override fun onDataChange(snapshot: DataSnapshot) {
                 val confirmFriendUser = snapshot.getValue(Users::class.java)
+                Log.d("Activity", "user->${confirmFriendUser}")
                 holder.usernameTxt.text = confirmFriendUser!!.username
                 Picasso.get().load(confirmFriendUser.profile).placeholder(R.drawable.blank_profile_picture).into(holder.profileImageView)
                 holder.itemView.setOnClickListener {
@@ -52,13 +55,13 @@ class FriendAdapter(private val mcontext: Context, private val friendList:List<S
                     builder.setItems(option, DialogInterface.OnClickListener{ dialog, position ->
                         if (position == 0){
                             val intent = Intent(mcontext,MessageChatActivity::class.java)
-                            intent.putExtra("Visit_id",confirmFriendUser!!.uid)
+                            intent.putExtra("Visit_id",confirmFriendUser.uid)
                             mcontext.startActivity(intent)
 
                         }
                         if (position == 1){
                             val intent = Intent(mcontext, VisitProfileActivity::class.java)
-                            intent.putExtra("Visit_id", confirmFriendUser!!.uid)
+                            intent.putExtra("Visit_id", confirmFriendUser.uid)
                             mcontext.startActivity(intent)
                         }
                     })

@@ -46,6 +46,20 @@ class ChatAdapter(private val mcontext: Context, private val mChatList:List<Chat
         val chat = mChatList[i]
 
         Picasso.get().load(imageUrl).into(holder.profileImage)
+        holder.rightimage?.setOnClickListener {
+            val intent = Intent(mcontext,FullImageActivity::class.java)
+            mcontext.startActivity(intent)
+        }
+        holder.leftimage?.setOnClickListener {
+            val intent = Intent(mcontext,FullImageActivity::class.java)
+            mcontext.startActivity(intent)
+        }
+
+        if (chat.message == "sent you an image." && chat.url != ""){
+            val lp = holder.textSeen!!.layoutParams as RelativeLayout.LayoutParams
+            lp.setMargins(0,245,10,0)
+            holder.textSeen!!.layoutParams = lp
+        }
 
         //images messages righside
         if (chat.message == "" && chat.url != ""){

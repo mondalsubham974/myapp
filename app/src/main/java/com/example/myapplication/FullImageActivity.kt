@@ -21,19 +21,20 @@ class FullImageActivity : AppCompatActivity() {
         val rightimage: ImageView? = findViewById(R.id.message_right_image)
         val leftimage: ImageView? = findViewById(R.id.message_left_image)
 
-        messages = intent.getStringExtra("message_id")
-        Log.d("msg","messages -> $messages")
-        val refUser = FirebaseDatabase.getInstance().reference.child("Chats").child(messages.toString())
 
 
-        refUser.addListenerForSingleValueEvent(object : ValueEventListener {
+        val refUser = FirebaseDatabase.getInstance().reference.child("Chats")
+        Log.d("msgsss","messages -> $refUser")
+
+        refUser.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
 
-            }
+        }
 
             override fun onDataChange(p0: DataSnapshot) {
                 val chat = p0.getValue(Chat::class.java)
-                if (chat?.message == "" && chat.url != "") {
+                Log.d("chat","messages -> $chat")
+                if (chat!!.message == "" && chat.url != "") {
                     Picasso.get().load(chat.url).into(rightimage)
                     Picasso.get().load(chat.url).into(leftimage)
                 }

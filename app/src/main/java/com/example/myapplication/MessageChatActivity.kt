@@ -71,12 +71,12 @@ class MessageChatActivity : AppCompatActivity() {
             override fun onDataChange(p0: DataSnapshot) {
                 Log.d("MainActivity", "user->${p0.exists()}")
                 if (p0.exists()) {
-                    val user = p0.getValue(Users::class.java)
-                    mchat_username.text = user?.username
-                    Log.d("MainActivity", "user->${user?.username}")
-                    Picasso.get().load(user?.profile).placeholder(R.drawable.blank_profile_picture).into(mchat_profile)
+                    val user:Users? = p0.getValue(Users::class.java)
+                    mchat_username.text = user!!.username
+                    Log.d("MainActivity", "user->${user.username}")
+                    Picasso.get().load(user.profile).placeholder(R.drawable.blank_profile_picture).into(mchat_profile)
 
-                    retrieveMessages(firebaseUser!!.uid,userIdVisit,user!!.profile)
+                    retrieveMessages(firebaseUser!!.uid,userIdVisit,user.profile)
                 }
             }
 
@@ -194,7 +194,9 @@ class MessageChatActivity : AppCompatActivity() {
             }).addOnCompleteListener { task ->
                 if (task.isSuccessful){
                     val downloadUrl = task.result
+                    Log.d("Bankura", "user->${downloadUrl}")
                     val mUrl = downloadUrl.toString()
+                    Log.d("Bankura", "user->${downloadUrl.toString()}")
                     val messageHashMap = HashMap<String,Any?>()
                     messageHashMap["sender"] = firebaseUser!!.uid
                     messageHashMap["message"] = ""
