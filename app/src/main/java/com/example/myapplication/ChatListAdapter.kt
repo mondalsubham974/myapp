@@ -31,7 +31,7 @@ class ChatListAdapter(private val mcontext: Context, private val chatfragmentLis
             override fun onCancelled(error: DatabaseError) {}
 
             override fun onDataChange(snapshot: DataSnapshot) {
-                val confirmFriendUser:Users? = snapshot.getValue(Users::class.java)
+                val confirmFriendUser= snapshot.getValue(Users::class.java)
                 holder.usernameTxt.text = confirmFriendUser!!.username
                 Picasso.get().load(confirmFriendUser.profile)
                     .placeholder(R.drawable.blank_profile_picture).into(holder.profileImageView)

@@ -36,7 +36,7 @@ class FullImageActivity : AppCompatActivity() {
                 Log.d("chat","messages -> $chat")
                 if (chat!!.message == "" && chat.url != "") {
                     Picasso.get().load(chat.url).into(rightimage)
-                    Picasso.get().load(chat.url).into(leftimage)
+                    Log.d("msg","msg->${rightimage}")
                 }
             }
 

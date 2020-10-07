@@ -15,7 +15,7 @@ class ChatsFragment : Fragment() {
     private var firebaseUser: String? = null
     private var userchatList: List<ChatList>? = null
     private var recyclerView: RecyclerView? = null
-    private var chatfragmentList: ArrayList<String>? = null
+    private var chatfragmentList: List<String>? = null
     private var mchatlistadapter: ChatListAdapter? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,7 +30,7 @@ class ChatsFragment : Fragment() {
         firebaseUser = FirebaseAuth.getInstance().currentUser!!.uid
         userchatList = ArrayList()
 
-        val ref = FirebaseDatabase.getInstance().reference.child("ChatsList").child(firebaseUser.toString())
+        val ref = FirebaseDatabase.getInstance().reference.child("ChatsList/$firebaseUser")
         ref.addValueEventListener(object : ValueEventListener{
             override fun onDataChange(p0: DataSnapshot) {
                 (userchatList as  ArrayList).clear()
