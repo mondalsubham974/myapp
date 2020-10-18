@@ -152,11 +152,11 @@ class MessageChatActivity : AppCompatActivity() {
                         }
 
                         override fun onDataChange(p0: DataSnapshot) {
+                            val chatsListReceiverRef = FirebaseDatabase.getInstance().reference
+                                .child("ChatsList").child(firebaseUser!!.uid).child(userIdVisit.toString())
                             if(!p0.exists()){
                                 chatsListReference.child("id").setValue(firebaseUser!!.uid)
                             }
-                            val chatsListReceiverRef = FirebaseDatabase.getInstance().reference
-                                .child("ChatsList").child(userIdVisit.toString()).child(firebaseUser!!.uid)
                             chatsListReceiverRef.child("id").setValue(firebaseUser!!.uid)
                         }
 
@@ -177,7 +177,7 @@ class MessageChatActivity : AppCompatActivity() {
             val storageReference = FirebaseStorage.getInstance().reference.child("Chat Images")
             val ref = FirebaseDatabase.getInstance().reference
             val messageId= ref.push().key
-            val filePath = storageReference.child("$messageId.jpg")
+            val filePath = storageReference.child("$messageId")
 
             val uploadTask: StorageTask<*>
             uploadTask = filePath.putFile(fileUrl!!)

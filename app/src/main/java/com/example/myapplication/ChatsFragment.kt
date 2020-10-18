@@ -17,6 +17,7 @@ class ChatsFragment : Fragment() {
     private var recyclerView: RecyclerView? = null
     private var chatfragmentList: List<String>? = null
     private var mchatlistadapter: ChatListAdapter? = null
+    private var userIdVisit:String?= null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -58,8 +59,10 @@ class ChatsFragment : Fragment() {
                 for (dataSnapshot in p0.children) {
                     val users = dataSnapshot.key
                     for (eachchatlist in userchatList!!) {
-                        if (firebaseUser == eachchatlist.id)
+                        if (firebaseUser == eachchatlist.id){
                             (chatfragmentList as ArrayList).add(users.toString())
+                        }
+
                     }
 
 
