@@ -48,10 +48,12 @@ class ChatAdapter(private val mcontext: Context, private val mChatList:List<Chat
         Picasso.get().load(imageUrl).into(holder.profileImage)
         holder.rightimage?.setOnClickListener {
             val intent = Intent(mcontext,FullImageActivity::class.java)
+            intent.putExtra("url",chat.url)
             mcontext.startActivity(intent)
         }
         holder.leftimage?.setOnClickListener {
             val intent = Intent(mcontext,FullImageActivity::class.java)
+            intent.putExtra("url",chat.url)
             mcontext.startActivity(intent)
         }
 

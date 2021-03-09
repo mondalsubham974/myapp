@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-           R.id.action_signout ->
+           R.id. SignOut->
             {
                 FirebaseAuth.getInstance().signOut()
                 val intent = Intent(this,LoginActivity::class.java)
@@ -101,7 +101,7 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
 
-            R.id.action_Settings -> {
+            R.id.Setting -> {
                 val intent = Intent(this, SettingsActivity::class.java)
                 startActivity(intent)
                 return true
@@ -128,7 +128,7 @@ class ViewPagerAdapter(fragmentManager: FragmentManager):FragmentPagerAdapter(fr
         titles.add(title)
     }
 
-    override fun getPageTitle(position: Int): CharSequence? {
+    override fun getPageTitle(position: Int): CharSequence {
         return titles[position]
     }
 }

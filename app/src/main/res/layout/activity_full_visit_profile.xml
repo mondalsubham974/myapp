@@ -10,9 +10,13 @@
         android:id="@+id/full_image_visit_profile"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/black" />
-
-
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        app:srcCompat="@drawable/blank_profile_picture" />
 
 
 </RelativeLayout>

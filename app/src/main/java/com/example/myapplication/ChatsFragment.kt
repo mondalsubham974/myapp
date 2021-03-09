@@ -1,7 +1,8 @@
 package com.example.myapplication
 
+
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,15 +10,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.database.FirebaseDatabase
 
 
-class ChatsFragment : Fragment() {
-    private var firebaseUser: String? = null
-    private var userchatList: List<ChatList>? = null
-    private var recyclerView: RecyclerView? = null
-    private var chatfragmentList: List<String>? = null
-    private var mchatlistadapter: ChatListAdapter? = null
-    private var userIdVisit:String?= null
+class ChatsFragment : androidx.fragment.app.Fragment() {
+
+
+    lateinit var recyclerView: RecyclerView
+    private var userChatList: ArrayList<String>? = null
+    private var firebaseUser: String? = FirebaseAuth.getInstance().currentUser?.uid
+    private var chatlistadapter: ChatListAdapter? = null
+    private var userIdVisit: String?= null
+    private var ref: DatabaseReference? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -25,50 +29,39 @@ class ChatsFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_chats, container, false)
 
+
         recyclerView = view.findViewById(R.id.chat_list)
-        recyclerView?.setHasFixedSize(true)
-        recyclerView?.layoutManager = LinearLayoutManager(context)
-        firebaseUser = FirebaseAuth.getInstance().currentUser!!.uid
-        userchatList = ArrayList()
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        ref = FirebaseDatabase.getInstance().reference.child("ChatsList/${firebaseUser}")
+        userChatList = ArrayList()
 
-        val ref = FirebaseDatabase.getInstance().reference.child("ChatsList/$firebaseUser")
-        ref.addValueEventListener(object : ValueEventListener{
-            override fun onDataChange(p0: DataSnapshot) {
-                (userchatList as  ArrayList).clear()
-                for (dataSnapshot in p0.children){
-                    val chatlist = dataSnapshot.getValue(ChatList::class.java)
-                    (userchatList as  ArrayList).add(chatlist!!)
-                }
-                retrievechatlist()
-            }
 
-            override fun onCancelled(error: DatabaseError) {
+        Log.d("Subham", "chatlist->$ref")
+        retrievechatlist()
 
-            }
-
-        })
         return view
     }
 
     private fun retrievechatlist(){
-        chatfragmentList = ArrayList()
-        val ref = FirebaseDatabase.getInstance().reference.child("Confirm Friends/${firebaseUser.toString()}/Friends")
-        ref.addValueEventListener(object : ValueEventListener {
+        userChatList = ArrayList()
+
+
+        Log.d("Subha", "chatlist->$ref")
+        ref!!.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
 
-                for (dataSnapshot in p0.children) {
-                    val users = dataSnapshot.key
-                    for (eachchatlist in userchatList!!) {
-                        if (firebaseUser == eachchatlist.id){
-                            (chatfragmentList as ArrayList).add(users.toString())
-                        }
-
+                for (snapshot in p0.children) {
+                    //I also made it just get the key, since the key is the userId that we need.
+                    val user = snapshot.key!!
+                    Log.d("CHUKA", " uuu -> $user")
+                    if (firebaseUser != user) {
+                        userChatList!!.add(user)
                     }
 
-
                 }
-                mchatlistadapter = ChatListAdapter(context!!, chatfragmentList!!, false)
-                recyclerView!!.adapter = mchatlistadapter
+                chatlistadapter = ChatListAdapter(context!!, userChatList,false)
+                recyclerView.adapter = chatlistadapter
             }
 
             override fun onCancelled(error: DatabaseError) {

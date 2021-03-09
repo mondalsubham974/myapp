@@ -2,11 +2,12 @@ package com.example.myapplication
 
 import android.app.ProgressDialog
 import android.content.Intent
+import android.icu.util.TimeUnit
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.tasks.Continuation
@@ -19,6 +20,9 @@ import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_message_chat.*
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 class MessageChatActivity : AppCompatActivity() {
@@ -39,20 +43,20 @@ class MessageChatActivity : AppCompatActivity() {
 
 
         mchat_profile.setOnClickListener {
-            val intent = Intent(this,VisitProfileActivity::class.java)
-            intent.putExtra("Visit_id",userIdVisit)
+            val intent = Intent(this, VisitProfileActivity::class.java)
+            intent.putExtra("Visit_id", userIdVisit)
             this.startActivity(intent)
         }
         mchat_username.setOnClickListener {
-            val intent = Intent(this,VisitProfileActivity::class.java)
-            intent.putExtra("Visit_id",userIdVisit)
+            val intent = Intent(this, VisitProfileActivity::class.java)
+            intent.putExtra("Visit_id", userIdVisit)
             this.startActivity(intent)
         }
 
 
-        intent = intent
+
         userIdVisit = intent.getStringExtra("Visit_id")
-        Log.d("MessageChatActivity","username->$userIdVisit")
+        Log.d("MessageChatActivity", "username->$userIdVisit")
         firebaseUser = FirebaseAuth.getInstance().currentUser
 
         mchat_recyclerview = findViewById(R.id.mchat_recyclerview)
@@ -62,7 +66,7 @@ class MessageChatActivity : AppCompatActivity() {
         mchat_recyclerview.layoutManager = linearLayoutManager
 
         val refUser = FirebaseDatabase.getInstance().reference.child("User").child(userIdVisit.toString())
-        Log.d("MessageChatActivity","username->$refUser")
+        Log.d("MessageChatActivity", "username->$refUser")
         refUser.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
 
@@ -71,12 +75,12 @@ class MessageChatActivity : AppCompatActivity() {
             override fun onDataChange(p0: DataSnapshot) {
                 Log.d("MainActivity", "user->${p0.exists()}")
                 if (p0.exists()) {
-                    val user:Users? = p0.getValue(Users::class.java)
+                    val user: Users? = p0.getValue(Users::class.java)
                     mchat_username.text = user!!.username
                     Log.d("MainActivity", "user->${user.username}")
                     Picasso.get().load(user.profile).placeholder(R.drawable.blank_profile_picture).into(mchat_profile)
 
-                    retrieveMessages(firebaseUser!!.uid,userIdVisit,user.profile)
+                    retrieveMessages(firebaseUser!!.uid, userIdVisit, user.profile)
                 }
             }
 
@@ -85,10 +89,11 @@ class MessageChatActivity : AppCompatActivity() {
         send_btn.setOnClickListener{
             val msg = messageBox.text.toString()
             if (msg == ""){
-                Toast.makeText(this,"Please Write Message, first", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Please Write Message, first", Toast.LENGTH_LONG).show()
             }
             else{
-                sendMessageToUser(firebaseUser!!.uid,userIdVisit,msg)
+                sendMessageToUser(firebaseUser!!.uid, userIdVisit, msg)
+
             }
             messageBox.setText("")
         }
@@ -96,7 +101,7 @@ class MessageChatActivity : AppCompatActivity() {
             val intent = Intent()
             intent.action = Intent.ACTION_PICK
             intent.type = "image/*"
-            startActivityForResult(Intent.createChooser(intent,"Pick image"),438)
+            startActivityForResult(Intent.createChooser(intent, "Pick image"), 438)
         }
 
     }
@@ -104,19 +109,19 @@ class MessageChatActivity : AppCompatActivity() {
     private fun retrieveMessages(senderId: String, receiverId: String?, reciverimageurl: String) {
         mChatList = ArrayList()
         reference = FirebaseDatabase.getInstance().reference.child("Chats")
-        Log.d("msgeeee","reciver->$reference")
-        reference!!.addValueEventListener(object : ValueEventListener{
+        Log.d("msgeeee", "reciver->$reference")
+        reference!!.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(p0: DataSnapshot) {
 
-                for (snapshot in p0.children){
+                for (snapshot in p0.children) {
                     val chat = snapshot.getValue(Chat::class.java)
                     if (chat!!.receiver == senderId && chat.sender == receiverId ||
-                        chat.receiver == receiverId && chat.sender.equals(senderId)){
+                            chat.receiver == receiverId && chat.sender.equals(senderId)) {
                         (mChatList as ArrayList<Chat>).add(chat)
 
                     }
 
-                    ChatAdapter = ChatAdapter(this@MessageChatActivity,(mChatList as ArrayList<Chat>),reciverimageurl)
+                    ChatAdapter = ChatAdapter(this@MessageChatActivity, (mChatList as ArrayList<Chat>), reciverimageurl)
                     mchat_recyclerview.adapter = ChatAdapter
                 }
             }
@@ -133,56 +138,66 @@ class MessageChatActivity : AppCompatActivity() {
         val reference = FirebaseDatabase.getInstance().reference
         val messageKey = reference.push().key
 
-        val messageHashMap = HashMap<String,Any?>()
+        val date: Date = Date()
+        val messageHashMap = HashMap<String, Any?>()
         messageHashMap["sender"] = senderId
         messageHashMap["message"] = msg
         messageHashMap["receiver"] = receiverId
-        messageHashMap["isseen"] = false
+        messageHashMap["isSeen"] = false
         messageHashMap["url"] = ""
+        messageHashMap["senderTime"] = date.time
+        messageHashMap["receiverTime"] = date.time
         messageHashMap["messageId"] = messageKey
+        messageHashMap["lastMessageId"] = messageKey
+        messageHashMap["lastMessageTime"] = date.time
         reference.child("Chats").child(messageKey!!).setValue(messageHashMap)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val chatsListReference =
                         FirebaseDatabase.getInstance().reference.child("ChatsList").child(firebaseUser!!.uid)
                             .child(userIdVisit.toString())
-                    chatsListReference.addListenerForSingleValueEvent(object : ValueEventListener{
+                    chatsListReference.addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onCancelled(error: DatabaseError) {
 
                         }
 
                         override fun onDataChange(p0: DataSnapshot) {
-                            val chatsListReceiverRef = FirebaseDatabase.getInstance().reference
-                                .child("ChatsList").child(firebaseUser!!.uid).child(userIdVisit.toString())
-                            if(!p0.exists()){
-                                chatsListReference.child("id").setValue(firebaseUser!!.uid)
+
+                            if (!p0.exists()) {
+                                chatsListReference.child("id").setValue(userIdVisit.toString())
                             }
+                            val chatsListReceiverRef = FirebaseDatabase.getInstance().reference
+                                    .child("ChatsList").child(userIdVisit.toString()).child(firebaseUser!!.uid)
                             chatsListReceiverRef.child("id").setValue(firebaseUser!!.uid)
+
                         }
 
                     })
 
                 }
+
             }
 
     }
-    override fun onActivityResult(requestCode: Int,resultCode: Int,data: Intent?){
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == 438 && resultCode == RESULT_OK && data != null && data.data != null){
             val progressBar = ProgressDialog(this)
             progressBar.setMessage("image is uploading, please wait....")
             progressBar.show()
-
+            val date: Date = Date()
             val fileUrl = data.data
             val storageReference = FirebaseStorage.getInstance().reference.child("Chat Images")
             val ref = FirebaseDatabase.getInstance().reference
             val messageId= ref.push().key
             val filePath = storageReference.child("$messageId")
 
+
             val uploadTask: StorageTask<*>
             uploadTask = filePath.putFile(fileUrl!!)
+            Log.d("oooo", "$uploadTask")
             uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>> { task ->
-                if (!task.isSuccessful){
+                if (!task.isSuccessful) {
                     task.exception?.let {
                         throw it
 
@@ -197,14 +212,17 @@ class MessageChatActivity : AppCompatActivity() {
                     Log.d("Bankura", "user->${downloadUrl}")
                     val mUrl = downloadUrl.toString()
                     Log.d("Bankura", "user->${downloadUrl.toString()}")
-                    val messageHashMap = HashMap<String,Any?>()
+                    val messageHashMap = HashMap<String, Any?>()
                     messageHashMap["sender"] = firebaseUser!!.uid
                     messageHashMap["message"] = ""
                     messageHashMap["receiver"] = userIdVisit
                     messageHashMap["isseen"] = false
+                    messageHashMap["senderTime"] = date.time
+                    messageHashMap["receiverTime"] = date.time
                     messageHashMap["url"] = mUrl
                     messageHashMap["messageId"] = messageId
-
+                    messageHashMap["lastMessageId"] = messageId
+                    messageHashMap["lastMessageTime"] = date.time
                     ref.child("Chats").child(messageId!!).setValue(messageHashMap)
 
                 }

@@ -9,9 +9,11 @@
     <RelativeLayout
         android:layout_width="300dp"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true">
-
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="1dp"
+        android:layout_marginRight="1dp">
 
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -22,21 +24,21 @@
             android:layout_alignParentTop="true"
             android:layout_marginTop="8dp"
             android:src="@drawable/blank_profile_picture"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:visibility="gone"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/message_chat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+
+            android:layout_below="@+id/message_right_time"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="14dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="17dp"
             android:background="@drawable/message_right"
             android:padding="8dp"
-
             android:textColor="@color/cursorDrawable"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -61,15 +63,28 @@
             android:id="@+id/message_right_image"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            android:layout_alignParentTop="true"
+            android:layout_below="@+id/message_right_time"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="6dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/chatimage"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:visibility="gone"/>
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/message_right_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="65dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="161dp"
+            android:text="10.01 a.m." />
+
     </RelativeLayout>
 
 </RelativeLayout>

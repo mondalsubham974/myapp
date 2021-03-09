@@ -20,7 +20,6 @@ import kotlin.collections.ArrayList
 class FriendFragment : Fragment() {
     private var recyclerView: RecyclerView? = null
     private var friendList: ArrayList<String>? = null
-    private val mUsersDatabase: DatabaseReference? = null
     private var mDatabaseReference: DatabaseReference? = null
     private var mAuth: FirebaseAuth? = null
     private var firebaseUser: String? = null
@@ -51,37 +50,14 @@ class FriendFragment : Fragment() {
 
         return view
     }
-    private fun searchForUsers(str : String){
-        val firebaseUserId = FirebaseAuth.getInstance().currentUser?.uid
-        val queryUser =FirebaseDatabase.getInstance().reference.child("Confirm Friends").child(firebaseUser!!)
-            .orderByChild("search").startAt(str).endAt(str + "\uf8ff")
-        Log.d("subham", " uuu -> $queryUser")
-        queryUser.addListenerForSingleValueEvent(object: ValueEventListener{
-            override fun onCancelled(error: DatabaseError) {
 
-            }
-
-            override fun onDataChange(p0: DataSnapshot) {
-                (friendList as ArrayList<String>).clear()
-                for (snapshot in p0.children){
-                    val user= snapshot.key!!
-                    if (firebaseUser != user) {
-                        friendList!!.add(user)
-                    }
-                }
-                mFriendAdapter = FriendAdapter(context!!,friendList!!,false)
-                recyclerView?.adapter = mFriendAdapter
-            }
-
-        })
-    }
     private fun friend() {
         mDatabaseReference!!.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {}
 
             override fun onDataChange(p0: DataSnapshot) {
                 //TODO: this line below is not necessary
-                if (searchEditText?.text.toString() == ""){
+
                     (friendList as ArrayList<String>).clear()
                     for (snapshot in p0.children) {
                         //I also made it just get the key, since the key is the userId that we need.
@@ -92,7 +68,6 @@ class FriendFragment : Fragment() {
                         }
 
                     }
-                }
 
                 mFriendAdapter = FriendAdapter(context!!, friendList!!, false)
                 recyclerView?.adapter = mFriendAdapter

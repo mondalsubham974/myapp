@@ -82,7 +82,7 @@ class FriendAdapter(private val mcontext: Context, private val friendList:List<S
 
                             .child("Confirm Friends").child(it)
 
-                            .child("Friends").child(confirmFriendUser!!.uid)
+                            .child("Friends").child(confirmFriendUser.uid)
 
                             .removeValue()
 
